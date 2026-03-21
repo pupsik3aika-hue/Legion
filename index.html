@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LEGION</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23030303'/%3E%3Cpath d='M8,16 Q11,7 14,16 Q17,25 20,16 Q23,7 26,16' fill='none' stroke='%23c8ff00' stroke-width='2.5' stroke-linecap='round'/%3E%3Ccircle cx='6' cy='16' r='2' fill='%23c8ff00'/%3E%3Ccircle cx='28' cy='16' r='2' fill='%23c8ff00'/%3E%3C/svg%3E">
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Bebas+Neue&family=IBM+Plex+Mono:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #030303;
+  --surface: #080808;
+  --border: #151515;
+  --border2: #222;
+  --text: #ddd;
+  --muted: #444;
+  --muted2: #666;
+  --accent: #c8ff00;
+  --red: #ff2222;
+}
+
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 13px;
+  line-height: 1.7;
+  overflow-x: hidden;
+  cursor: crosshair;
+}
+
+body::after {
+  content:'';
+  position:fixed; inset:0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+  pointer-events:none; z-index:9998; opacity:.5;
+}
+body::before {
+  content:'';
+  position:fixed; inset:0;
+  background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.07) 2px, rgba(0,0,0,0.07) 4px);
+  pointer-events:none; z-index:9997;
+}
+
+
+/* CURSOR */
+.cur { width:5px; height:5px; background:var(--accent); border-radius:50%; position:fixed; pointer-events:none; z-index:99999; transform:translate(-50%,-50%); }
+.cur-ring { width:26px; height:26px; border:1px solid rgba(200,255,0,0.3); border-radius:50%; position:fixed; pointer-events:none; z-index:99998; transform:translate(-50%,-50%); transition:transform .12s ease; }
+body.light .cur-ring { border-color: rgba(74,122,0,0.35); }
+
+/* NAV */
+nav {
+  position:fixed; top:0; left:0; right:0; z-index:500;
+  display:flex; justify-content:space-between; align-items:center;
+  padding:22px 56px;
+  transition: background .3s, border-color .3s;
+  border-bottom:1px solid transparent;
+}
+nav.scrolled { background:rgba(3,3,3,0.97); border-color:var(--border2); backdrop-filter:blur(16px); }
+.nav-logo {
+  font-family:'Bebas Neue',sans-serif; font-size:24px;
+  letter-spacing:.3em; color:var(--accent); text-decoration:none;
+  animation:logoGlitch 7s infinite;
+}
+@keyframes logoGlitch {
+  0%,88%,100%{text-shadow:none}
+  90%{text-shadow:-2px 0 var(--red),2px 0 #00f8ff}
+  92%{text-shadow:2px 0 var(--red),-2px 0 #00f8ff}
+  94%{text-shadow:none}
+}
+.nav-links { display:flex; gap:36px; list-style:none; }
+.nav-links a { color:var(--muted2); font-size:10px; letter-spacing:.2em; text-transform:uppercase; text-decoration:none; transition:color .2s; }
+.nav-links a:hover { color:var(--accent); }
+
+/* HERO */
+#hero {
+  min-height:100vh; display:flex; flex-direction:column;
+  justify-content:flex-end; padding:0 56px 80px;
+  position:relative; overflow:hidden;
+}
+.hero-grid {
+  position:absolute; inset:0;
+  background-image: linear-gradient(rgba(200,255,0,.025) 1px,transparent 1px), linear-gradient(90deg,rgba(200,255,0,.025) 1px,transparent 1px);
+  background-size:80px 80px;
+  animation:gridMove 25s linear infinite;
+}
+@keyframes gridMove { to{background-position:0 80px} }
+
+.hero-live {
+  position:absolute; top:50%; right:56px; transform:translateY(-50%);
+  text-align:right; pointer-events:none;
+}
+.live-dot { display:inline-block; width:6px; height:6px; background:var(--accent); border-radius:50%; margin-right:8px; animation:blink 1.4s ease infinite; }
+@keyframes blink { 0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(200,255,0,.5)} 50%{opacity:.5;box-shadow:0 0 0 10px rgba(200,255,0,0)} }
+.live-label { font-size:9px; letter-spacing:.25em; color:var(--muted); text-transform:uppercase; }
+.live-number { font-family:'Bebas Neue',sans-serif; font-size:80px; line-height:1; color:var(--text); display:block; }
+.live-sub { font-size:9px; letter-spacing:.2em; color:var(--muted); margin-top:4px; }
+
+.hero-tag { font-size:10px; letter-spacing:.35em; color:var(--accent); text-transform:uppercase; margin-bottom:24px; opacity:0; animation:fu .7s ease .3s forwards; }
+.hero-title { font-family:'Bebas Neue',sans-serif; font-size:clamp(80px,16vw,220px); line-height:.85; letter-spacing:.04em; opacity:0; animation:fu .7s ease .5s forwards; }
+.hero-title .out { display:block; color:transparent; -webkit-text-stroke:1px rgba(200,255,0,.2); }
+.hero-desc { max-width:500px; margin-top:36px; color:var(--muted2); font-size:12px; line-height:2.1; opacity:0; animation:fu .7s ease .7s forwards; }
+.hero-actions { margin-top:44px; display:flex; gap:20px; align-items:center; opacity:0; animation:fu .7s ease .9s forwards; }
+.scroll-hint { position:absolute; bottom:40px; left:56px; font-size:9px; letter-spacing:.3em; color:var(--muted); text-transform:uppercase; display:flex; align-items:center; gap:12px; opacity:0; animation:fu .5s ease 1.2s forwards; }
+.scroll-hint::before { content:''; display:block; width:36px; height:1px; background:var(--muted); }
+@keyframes fu { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+
+/* BUTTONS */
+.btn-join { display:inline-flex; align-items:center; gap:10px; padding:13px 36px; background:var(--accent); color:#000; font-family:'Share Tech Mono',monospace; font-size:11px; font-weight:700; letter-spacing:.2em; text-transform:uppercase; text-decoration:none; clip-path:polygon(8px 0%,100% 0%,calc(100% - 8px) 100%,0% 100%); transition:background .2s,transform .2s; border:none; cursor:pointer; }
+.btn-join:hover { background:#d4ff33; transform:translateY(-2px); }
+.btn-ghost { color:var(--muted2); font-size:11px; letter-spacing:.1em; text-decoration:none; transition:color .2s; }
+.btn-ghost:hover { color:var(--text); }
+
+/* SECTION BASE */
+section { padding:120px 56px; border-top:1px solid var(--border); }
+.s-label { font-size:9px; letter-spacing:.4em; color:var(--accent); text-transform:uppercase; margin-bottom:12px; }
+.s-title { font-family:'Bebas Neue',sans-serif; font-size:clamp(40px,5vw,72px); line-height:1; letter-spacing:.03em; margin-bottom:64px; }
+.s-title em { color:var(--accent); font-style:normal; }
+
+/* ABOUT */
+#about .ag { display:grid; grid-template-columns:1.2fr 1fr; gap:80px; align-items:start; }
+.ab p { color:var(--muted2); font-size:13px; line-height:2.1; }
+.ab p+p { margin-top:20px; }
+.sg { display:grid; grid-template-columns:1fr 1fr; gap:1px; background:var(--border2); }
+.sb { background:var(--surface); padding:32px 28px; }
+.sn { font-family:'Bebas Neue',sans-serif; font-size:52px; line-height:1; display:flex; align-items:baseline; gap:4px; }
+.sn sup { font-size:18px; color:var(--accent); }
+.sl { font-size:9px; letter-spacing:.25em; text-transform:uppercase; color:var(--muted); margin-top:6px; }
+.sb.live .sn { color:var(--accent); }
+.mini-dot { display:inline-block; width:5px; height:5px; background:var(--accent); border-radius:50%; margin-left:6px; margin-bottom:3px; animation:blink 1.4s infinite; }
+
+/* MANIFESTO */
+#manifesto { background:var(--surface); }
+#manifesto .inn { max-width:780px; }
+.mi { display:grid; grid-template-columns:56px 1fr; gap:28px; align-items:start; padding:32px 0; border-bottom:1px solid var(--border); }
+.mi:last-child { border-bottom:none; }
+.mn { font-family:'Bebas Neue',sans-serif; font-size:48px; color:var(--border2); line-height:1; transition:color .3s; }
+.mi:hover .mn { color:var(--accent); }
+.mt { font-family:'Bebas Neue',sans-serif; font-size:22px; letter-spacing:.04em; margin-bottom:10px; }
+.mb { font-size:12px; color:var(--muted2); line-height:2; }
+
+/* TEAM */
+#team .tm { display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); gap:1px; background:var(--border2); }
+.mc { background:var(--surface); padding:40px 32px; position:relative; overflow:hidden; transition:background .3s; }
+.mc:hover { background: var(--border); }
+.mc::before { content:''; position:absolute; left:0; top:0; bottom:0; width:2px; background:var(--accent); transform:scaleY(0); transition:transform .3s; transform-origin:bottom; }
+.mc:hover::before { transform:scaleY(1); }
+.mc-id { position:absolute; top:16px; right:16px; font-size:9px; color:var(--border2); letter-spacing:.12em; }
+.mc-ico { width:52px; height:52px; background:var(--border); display:flex; align-items:center; justify-content:center; font-size:22px; margin-bottom:22px; }
+.mc-badge { display:inline-block; padding:2px 8px; font-size:8px; letter-spacing:.2em; border:1px solid var(--accent); color:var(--accent); text-transform:uppercase; margin-bottom:10px; }
+.mc-name { font-family:'Bebas Neue',sans-serif; font-size:20px; letter-spacing:.08em; margin-bottom:6px; }
+.mc-role { font-size:9px; letter-spacing:.25em; text-transform:uppercase; color:var(--accent); margin-bottom:14px; }
+.mc-bio { font-size:11px; color:var(--muted2); line-height:1.9; }
+.rx { background:var(--muted); color:transparent; user-select:none; }
+
+/* OPS */
+#ops .og { display:grid; grid-template-columns:1fr 1fr; gap:1px; background:var(--border2); }
+.oc { background:var(--surface); padding:40px; position:relative; overflow:hidden; transition:background .3s; }
+.oc:hover { background: var(--border); }
+.oc.feat { grid-column:span 2; }
+.oc-bar { position:absolute; top:0; left:0; right:0; height:2px; background:var(--border2); transition:background .3s; }
+.oc:hover .oc-bar { background:var(--accent); }
+.oc-st { display:inline-flex; align-items:center; gap:6px; font-size:9px; letter-spacing:.2em; text-transform:uppercase; margin-bottom:18px; }
+.oc-st.done::before { content:'●'; color:#333; } .oc-st.done { color:var(--muted2); }
+.oc-st.active::before { content:'●'; animation:blink 1s infinite; } .oc-st.active { color:var(--accent); }
+.oc-st.cls::before { content:'■'; } .oc-st.cls { color:var(--red); }
+.oc-name { font-family:'Bebas Neue',sans-serif; font-size:28px; letter-spacing:.05em; margin-bottom:12px; }
+.oc-desc { font-size:12px; color:var(--muted2); line-height:2; margin-bottom:20px; }
+.oc-meta { display:flex; gap:24px; flex-wrap:wrap; }
+.oc-m { font-size:9px; letter-spacing:.12em; color:var(--muted); text-transform:uppercase; }
+.oc-m span { color:var(--muted2); }
+.oc-n { position:absolute; right:28px; bottom:20px; font-family:'Bebas Neue',sans-serif; font-size:80px; color:var(--border); line-height:1; pointer-events:none; }
+
+/* MAP */
+#mapsec { padding:120px 0; border-top:1px solid var(--border); }
+#mapsec .mh { padding:0 56px 56px; }
+.mw { position:relative; background:var(--surface); border-top:1px solid var(--border); border-bottom:1px solid var(--border); }
+#wmap { width:100%; height:480px; display:block; }
+.mtt { position:absolute; background:var(--surface); border:1px solid var(--border2); padding:12px 16px; font-size:11px; pointer-events:none; display:none; z-index:10; }
+.mtt-c { font-size:9px; letter-spacing:.2em; color:var(--accent); text-transform:uppercase; }
+.mtt-n { font-family:'Bebas Neue',sans-serif; font-size:20px; letter-spacing:.08em; margin:2px 0; }
+.mtt-v { font-size:10px; color:var(--muted2); }
+.mleg { display:flex; gap:28px; padding:20px 56px; border-top:1px solid var(--border); }
+.mli { display:flex; align-items:center; gap:8px; font-size:10px; letter-spacing:.1em; color:var(--muted2); text-transform:uppercase; }
+.mld { width:8px; height:8px; border-radius:50%; }
+
+/* NEWS */
+#news .np { display:grid; grid-template-columns:1fr 1fr; gap:1px; background:var(--border2); }
+.pc { background:var(--surface); padding:40px; text-decoration:none; color:inherit; display:flex; flex-direction:column; gap:14px; position:relative; overflow:hidden; transition:background .3s; }
+.pc:hover { background: var(--border); }
+.pc-acc { position:absolute; left:0; top:0; bottom:0; width:2px; background:var(--accent); transform:scaleY(0); transition:transform .3s; }
+.pc:hover .pc-acc { transform:scaleY(1); }
+.pc-d { font-size:9px; letter-spacing:.2em; color:var(--muted); text-transform:uppercase; }
+.pc-t { font-family:'Bebas Neue',sans-serif; font-size:22px; letter-spacing:.04em; transition:color .2s; }
+.pc:hover .pc-t { color:var(--accent); }
+.pc-b { font-size:11px; color:var(--muted2); line-height:1.9; }
+.pc-tag { display:inline-block; padding:3px 10px; border:1px solid var(--border2); font-size:8px; letter-spacing:.2em; text-transform:uppercase; color:var(--muted); margin-top:auto; align-self:flex-start; }
+
+/* CONTACT */
+#contact { background:var(--surface); }
+#contact .ci { display:grid; grid-template-columns:1fr 1fr; gap:80px; }
+.cl { display:flex; gap:24px; align-items:flex-start; padding:20px 0; border-bottom:1px solid var(--border); }
+.ck { font-size:9px; letter-spacing:.2em; text-transform:uppercase; color:var(--muted); min-width:90px; padding-top:2px; }
+.cv a { color:var(--accent); text-decoration:none; } .cv a:hover { text-decoration:underline; }
+.cv { font-size:13px; color:var(--text); }
+.cf { display:flex; flex-direction:column; gap:20px; }
+.fl { font-size:9px; letter-spacing:.2em; text-transform:uppercase; color:var(--muted); display:block; margin-bottom:8px; }
+.fi, .fta { width:100%; background:var(--bg); border:1px solid var(--border2); color:var(--text); font-family:'Share Tech Mono',monospace; font-size:13px; padding:13px 16px; outline:none; resize:none; transition:border-color .2s; }
+.fi:focus, .fta:focus { border-color:var(--accent); }
+.fi::placeholder, .fta::placeholder { color:var(--border2); }
+
+/* FOOTER */
+footer { padding:32px 56px; border-top:1px solid var(--border); display:flex; justify-content:space-between; align-items:center; font-size:10px; color:var(--muted); }
+.fl-logo { font-family:'Bebas Neue',sans-serif; font-size:20px; letter-spacing:.25em; color:var(--accent); }
+
+::-webkit-scrollbar { width:3px; }
+::-webkit-scrollbar-track { background:var(--bg); }
+::-webkit-scrollbar-thumb { background:var(--border2); }
+
+.reveal { opacity:0; transform:translateY(28px); transition:opacity .7s ease,transform .7s ease; }
+.reveal.on { opacity:1; transform:none; }
+
+/* THEME TOGGLE */
+body.light {
+  --bg:#f2f2ee; --surface:#e8e8e3; --border:#d5d5d0; --border2:#bbb;
+  --text:#111; --muted:#888; --muted2:#666; --accent:#4a7a00; --red:#cc0000;
+}
+body.light nav { background: rgba(242,242,238,0.97) !important; border-color: var(--border2); }
+body.light nav.scrolled { background: rgba(232,232,227,0.98) !important; }
+body.light .nav-logo { color: var(--accent); }
+body.light .nav-links a { color: var(--muted2); }
+body.light .nav-links a:hover { color: var(--accent); }
+body.light .cur { background: var(--accent); }
+body.light .cur-ring { border-color: rgba(74,122,0,0.4); }
+body.light .hero-grid { background-image: linear-gradient(rgba(74,122,0,.04) 1px,transparent 1px), linear-gradient(90deg,rgba(74,122,0,.04) 1px,transparent 1px); }
+body.light .live-dot { background: var(--accent); }
+body.light .btn-join { background: var(--accent); color: #fff; }
+body.light .btn-join:hover { background: #3a6a00; }
+body.light .mc::before { background: var(--accent); }
+body.light .post::before, body.light .pc-acc { background: var(--accent); }
+body.light .oc-bar { background: var(--border2); }
+body.light .oc:hover .oc-bar { background: var(--accent); }
+body.light .mi:hover .mn { color: var(--accent); }
+body.light .member::before { background: var(--accent); }
+body.light footer { background: var(--surface); }
+.theme-btn { position:fixed; bottom:32px; right:32px; z-index:400; width:44px; height:44px; background:var(--surface); border:1px solid var(--border2); color:var(--accent); font-size:18px; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:background .2s; }
+.theme-btn:hover { background:var(--border2); }
+
+/* SCROLL PROGRESS */
+#scrollBar { position:fixed; top:0; left:0; height:2px; background:var(--accent); z-index:9999; width:0%; transition:width .1s; }
+
+/* PARTICLES */
+#particles { position:absolute; inset:0; pointer-events:none; z-index:0; }
+
+/* QUOTES */
+#quotes { background:var(--surface); }
+.quotes-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:1px; background:var(--border2); }
+.quote-card { background:var(--bg); padding:36px 32px; position:relative; }
+.quote-card::before { content:'"'; position:absolute; top:16px; left:24px; font-family:'Bebas Neue',sans-serif; font-size:60px; color:var(--border2); line-height:1; }
+.quote-text { font-size:13px; color:var(--muted2); line-height:2; margin-bottom:20px; padding-top:20px; }
+.quote-author { font-size:9px; letter-spacing:.25em; text-transform:uppercase; color:var(--accent); }
+
+/* ACHIEVEMENTS */
+#achievements .ach-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:1px; background:var(--border2); }
+.ach-item { background:var(--surface); padding:32px 28px; text-align:center; transition:background .3s; }
+.ach-item:hover { background:var(--bg); }
+.ach-icon { font-size:32px; margin-bottom:16px; display:block; }
+.ach-name { font-family:'Bebas Neue',sans-serif; font-size:18px; letter-spacing:.05em; margin-bottom:8px; }
+.ach-desc { font-size:11px; color:var(--muted2); line-height:1.8; }
+
+/* FAQ */
+#faq { background:var(--surface); }
+#faq .inn { max-width:780px; }
+.faq-item { border-bottom:1px solid var(--border); }
+.faq-q { padding:24px 0; font-family:'Bebas Neue',sans-serif; font-size:20px; letter-spacing:.04em; cursor:pointer; display:flex; justify-content:space-between; align-items:center; user-select:none; transition:color .2s; }
+.faq-q:hover { color:var(--accent); }
+.faq-q::after { content:'+'; font-size:24px; color:var(--accent); transition:transform .3s; }
+.faq-item.open .faq-q::after { transform:rotate(45deg); }
+.faq-a { font-size:12px; color:var(--muted2); line-height:2; max-height:0; overflow:hidden; transition:max-height .4s ease, padding .3s; }
+.faq-item.open .faq-a { max-height:200px; padding-bottom:24px; }
+
+@media(max-width:900px) {
+  .theme-btn { bottom:20px; right:20px; }
+}
+</style>
+</head>
+<body>
+
+<div id="scrollBar"></div>
+<button class="theme-btn" id="themeBtn" title="Сменить тему">☀</button>
+
+<div class="cur" id="cur"></div>
+<div class="cur-ring" id="curRing"></div>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="#hero" class="nav-logo">LEGION</a>
+  <ul class="nav-links">
+    <li><a href="#about">О нас</a></li>
+    <li><a href="#manifesto">Манифест</a></li>
+    <li><a href="#team">Состав</a></li>
+    <li><a href="#ops">Операции</a></li>
+    <li><a href="#mapsec">Карта</a></li>
+    <li><a href="#quotes">Цитаты</a></li>
+    <li><a href="#achievements">Достижения</a></li>
+    <li><a href="#faq">FAQ</a></li>
+    <li><a href="#osint">OSINT</a></li>
+    <li><a href="#contact">Контакт</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <canvas id="particles"></canvas>
+  <div class="hero-grid"></div>
+  <div class="hero-live">
+    <div class="live-label"><span class="live-dot"></span>участников онлайн</div>
+    <span class="live-number" id="liveNum">247</span>
+    <div class="live-sub">ОБНОВЛЯЕТСЯ В РЕАЛЬНОМ ВРЕМЕНИ</div>
+  </div>
+  <div class="hero-tag">[ АНОНИМНАЯ ОРГАНИЗАЦИЯ ]</div>
+  <div class="hero-title">LEGION<br><span class="out">АНОНИМНЫ</span></div>
+  <p class="hero-desc">Мы существуем не как личности — мы существуем как идея.<br>Нас нельзя уничтожить, потому что нас нельзя найти.<br><span style="color:var(--muted)">We are anonymous. We are legion.</span></p>
+  <div class="hero-actions">
+    <a href="https://t.me/LegionAnket_bot" target="_blank" class="btn-join">▶ Вступить в Legion</a>
+    <a href="#about" class="btn-ghost">Узнать больше →</a>
+  </div>
+  <div class="scroll-hint">Скролл вниз</div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="s-label reveal">// 01 — О нас</div>
+  <div class="s-title reveal">МЫ — <em>ИДЕЯ.</em><br>ИДЕИ НЕ УМИРАЮТ.</div>
+  <div class="ag reveal">
+    <div class="ab">
+      <p>Legion — это не группа людей. Это принцип. Мы собираемся вокруг общих ценностей: свободы информации, прозрачности и права на анонимность.</p>
+      <p>У нас нет штаб-квартиры. У нас нет официального лидера. У нас нет лица. Каждый участник — автономная единица, действующая в рамках общего кодекса.</p>
+      <p>Мы не враги и не союзники по умолчанию. Мы — зеркало системы.</p>
+    </div>
+    <div class="sg">
+      <div class="sb live">
+        <div class="sn"><span id="sCnt">247</span><div class="mini-dot"></div></div>
+        <div class="sl">Участников</div>
+      </div>
+      <div class="sb">
+        <div class="sn"><span id="sOps">0</span><sup>+</sup></div>
+        <div class="sl">Операций</div>
+      </div>
+      <div class="sb">
+        <div class="sn"><span id="sYrs">0</span></div>
+        <div class="sl">Лет активности</div>
+      </div>
+      <div class="sb">
+        <div class="sn">∞</div>
+        <div class="sl">Идей</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MANIFESTO -->
+<section id="manifesto">
+  <div class="s-label reveal">// 02 — Кодекс</div>
+  <div class="s-title reveal">МАНИФЕСТ<br><em>ЛЕГИОНА</em></div>
+  <div class="inn reveal">
+    <div class="mi"><div class="mn">01</div><div><div class="mt">Анонимность — основа</div><div class="mb">Личность участника неприкосновенна. Мы никогда не раскрываем информацию об участниках. Позывной — единственная идентичность внутри организации.</div></div></div>
+    <div class="mi"><div class="mn">02</div><div><div class="mt">Нет иерархии — есть роли</div><div class="mb">Legion не имеет вертикали власти. Есть роли и зоны ответственности. Каждый участник действует автономно в рамках общего кодекса.</div></div></div>
+    <div class="mi"><div class="mn">03</div><div><div class="mt">Информация должна быть свободной</div><div class="mb">Знание — не привилегия. Мы против цензуры, против монополии на правду и против систем, скрывающих информацию от людей.</div></div></div>
+    <div class="mi"><div class="mn">04</div><div><div class="mt">Действия — не слова</div><div class="mb">Легион не занимается пустыми декларациями. Каждое решение сопровождается действием. Мы не говорим — мы делаем.</div></div></div>
+    <div class="mi"><div class="mn">05</div><div><div class="mt">Не прощаем. Не забываем.</div><div class="mb">Предательство организации или её участников влечёт последствия. Legion помнит всё. Legion ждёт столько, сколько нужно.</div></div></div>
+  </div>
+</section>
+
+<!-- TEAM -->
+<section id="team">
+  <div class="s-label reveal">// 03 — Состав</div>
+  <div class="s-title reveal">БЕЗ ИМЁН.<br><em>ТОЛЬКО РОЛИ.</em></div>
+  <div class="tm reveal">
+    <div class="mc" style="border:1px solid rgba(200,255,0,0.12)">
+      <span class="mc-id">#001</span>
+      <div class="mc-ico">★</div>
+      <div class="mc-badge">Основатель</div>
+      <div class="mc-name">M1LANCOLY</div>
+      <div class="mc-role">Архитектор Легиона</div>
+      <div class="mc-bio">Создал концепцию, структуру и кодекс организации.<br>Видение: построить то, что нельзя сломать.</div>
+    </div>
+    <div class="mc">
+      <span class="mc-id">#007</span>
+      <div class="mc-ico">◈</div>
+      <div class="mc-name">PHANTOM</div>
+      <div class="mc-role">Оперативник</div>
+      <div class="mc-bio">Исполнитель на местах. Специализируется на тихих операциях.<br>Местонахождение: <span class="rx">█████████</span></div>
+    </div>
+    <div class="mc">
+      <span class="mc-id">#013</span>
+      <div class="mc-ico">◎</div>
+      <div class="mc-name">SIGNAL</div>
+      <div class="mc-role">Связной</div>
+      <div class="mc-bio">Контролирует каналы коммуникации. Безопасность передачи данных.<br>Контакт: <span class="rx">███████████</span></div>
+    </div>
+    <div class="mc">
+      <span class="mc-id">#???</span>
+      <div class="mc-ico">?</div>
+      <div class="mc-name"><span class="rx">████████</span></div>
+      <div class="mc-role">Засекречено</div>
+      <div class="mc-bio">Информация недоступна.<br>Допуск: <span class="rx">████ ████████</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- OPERATIONS -->
+<section id="ops">
+  <div class="s-label reveal">// 04 — Архив</div>
+  <div class="s-title reveal">ОПЕРАЦИИ<br><em>ЛЕГИОНА</em></div>
+  <div class="og reveal">
+    <div class="oc feat">
+      <div class="oc-bar"></div>
+      <div class="oc-st active">Активная</div>
+      <div class="oc-name">Операция «ТИШИНА»</div>
+      <div class="oc-desc">Долгосрочная операция по мониторингу и документированию. Детали засекречены до завершения. Задействовано <span class="rx">██</span> ячеек в <span class="rx">█</span> странах.</div>
+      <div class="oc-meta">
+        <div class="oc-m">Статус: <span style="color:var(--accent)">В процессе</span></div>
+        <div class="oc-m">Начало: <span><span class="rx">██.██</span>.2025</span></div>
+        <div class="oc-m">Участников: <span class="rx">██</span></div>
+        <div class="oc-m">Приоритет: <span style="color:var(--accent)">ВЫСОКИЙ</span></div>
+      </div>
+      <div class="oc-n">01</div>
+    </div>
+    <div class="oc">
+      <div class="oc-bar"></div>
+      <div class="oc-st done">Завершена</div>
+      <div class="oc-name">Операция «ПРИЗРАК»</div>
+      <div class="oc-desc">Успешно завершена. Цель достигнута без потерь. Полный отчёт в закрытом канале.</div>
+      <div class="oc-meta">
+        <div class="oc-m">Дата: <span>03.2026</span></div>
+        <div class="oc-m">Итог: <span style="color:var(--accent)">Успех</span></div>
+      </div>
+      <div class="oc-n">02</div>
+    </div>
+    <div class="oc">
+      <div class="oc-bar"></div>
+      <div class="oc-st cls">Засекречено</div>
+      <div class="oc-name">Операция «<span class="rx">███████</span>»</div>
+      <div class="oc-desc">Вся информация засекречена. Доступ уровня <span class="rx">████</span> и выше.</div>
+      <div class="oc-meta">
+        <div class="oc-m">Статус: <span style="color:var(--red)">Classified</span></div>
+        <div class="oc-m">Дата: <span class="rx">██.██.████</span></div>
+      </div>
+      <div class="oc-n">03</div>
+    </div>
+    <div class="oc">
+      <div class="oc-bar"></div>
+      <div class="oc-st done">Завершена</div>
+      <div class="oc-name">Операция «СИГНАЛ»</div>
+      <div class="oc-desc">Установлены защищённые каналы связи между ячейками. Протокол внедрён.</div>
+      <div class="oc-meta">
+        <div class="oc-m">Дата: <span>01.2026</span></div>
+        <div class="oc-m">Итог: <span style="color:var(--accent)">Успех</span></div>
+      </div>
+      <div class="oc-n">04</div>
+    </div>
+  </div>
+</section>
+
+<!-- MAP -->
+<section id="mapsec">
+  <div class="mh">
+    <div class="s-label reveal">// 05 — Ячейки</div>
+    <div class="s-title reveal" style="margin-bottom:0">КАРТА<br><em>ЛЕГИОНА</em></div>
+  </div>
+  <div class="mw">
+    <canvas id="wmap"></canvas>
+    <div class="mtt" id="mtt">
+      <div class="mtt-c" id="ttc"></div>
+      <div class="mtt-n" id="ttn"></div>
+      <div class="mtt-v" id="ttv"></div>
+    </div>
+  </div>
+  <div class="mleg">
+    <div class="mli"><div class="mld" style="background:var(--accent)"></div>Активная ячейка</div>
+    <div class="mli"><div class="mld" style="background:#444"></div>Наблюдатели</div>
+    <div class="mli"><div class="mld" style="background:var(--red)"></div>Засекречено</div>
+  </div>
+</section>
+
+<!-- NEWS -->
+<section id="news">
+  <div class="s-label reveal">// 06 — Новости</div>
+  <div class="s-title reveal">ПОСЛЕДНИЕ<br><em>СОБЫТИЯ</em></div>
+  <div class="np reveal">
+    <a href="#" class="pc"><div class="pc-acc"></div><span class="pc-d">21.03.2026 — 04:17 UTC</span><div class="pc-t">Операция «Призрак» завершена успешно</div><div class="pc-b">Цель достигнута. Детали засекречены на 90 дней. Участники выведены без потерь.</div><span class="pc-tag">Оперативное</span></a>
+    <a href="#" class="pc"><div class="pc-acc"></div><span class="pc-d">15.03.2026 — 22:03 UTC</span><div class="pc-t">Новый протокол безопасной связи</div><div class="pc-b">SIGNAL разработал обновлённый протокол шифрования. Переход обязателен до 01.04.2026.</div><span class="pc-tag">Внутреннее</span></a>
+    <a href="#" class="pc"><div class="pc-acc"></div><span class="pc-d">02.03.2026 — 11:44 UTC</span><div class="pc-t">Набор в новую ячейку открыт</div><div class="pc-b">Ячейка #9 ищет специалистов: криптография, OSINT, полевая работа. Вступление через бота.</div><span class="pc-tag">Набор</span></a>
+    <a href="#" class="pc"><div class="pc-acc"></div><span class="pc-d">18.02.2026 — 08:29 UTC</span><div class="pc-t">Манифест обновлён: версия 3.1</div><div class="pc-b">Обновлены ключевые положения кодекса. Изменения вступают в силу немедленно.</div><span class="pc-tag">Манифест</span></a>
+  </div>
+</section>
+
+<!-- OSINT -->
+<section id="osint">
+  <div class="s-label reveal">// 07 — Услуги</div>
+  <div class="s-title reveal">OSINT<br><em>ПО ЗАПРОСУ</em></div>
+  <div class="reveal" style="display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start">
+    <div>
+      <p style="color:var(--muted2);font-size:13px;line-height:2.1;margin-bottom:32px">Legion предоставляет услуги разведки на основе открытых источников.<br>Только легальные методы — публичные базы, соцсети, открытые реестры.<br>Анонимность клиента гарантируется.</p>
+      <div style="display:grid;gap:1px;background:var(--border2)">
+        <div style="background:var(--surface);padding:24px 28px"><div style="font-size:9px;letter-spacing:.25em;text-transform:uppercase;color:var(--accent);margin-bottom:8px">01 — Поиск по никнейму</div><div style="font-size:12px;color:var(--muted2);line-height:1.9">Поиск аккаунтов по никнейму на сотнях платформ. Соцсети, форумы, репозитории.</div></div>
+        <div style="background:var(--surface);padding:24px 28px"><div style="font-size:9px;letter-spacing:.25em;text-transform:uppercase;color:var(--accent);margin-bottom:8px">02 — Анализ цифрового следа</div><div style="font-size:12px;color:var(--muted2);line-height:1.9">Сбор публичной информации: активность, связи, упоминания в открытых источниках.</div></div>
+        <div style="background:var(--surface);padding:24px 28px"><div style="font-size:9px;letter-spacing:.25em;text-transform:uppercase;color:var(--accent);margin-bottom:8px">03 — Верификация данных</div><div style="font-size:12px;color:var(--muted2);line-height:1.9">Проверка достоверности информации через перекрёстный анализ открытых источников.</div></div>
+        <div style="background:var(--surface);padding:24px 28px"><div style="font-size:9px;letter-spacing:.25em;text-transform:uppercase;color:var(--accent);margin-bottom:8px">04 — Мониторинг организаций</div><div style="font-size:12px;color:var(--muted2);line-height:1.9">Публичные реестры, юридические документы, открытые корпоративные данные.</div></div>
+      </div>
+      <div style="margin-top:24px;padding:20px 24px;border:1px solid var(--border2);font-size:11px;color:var(--muted2);line-height:1.9">
+        ⚠ Мы работаем <strong style="color:var(--text)">только с открытыми источниками</strong>.<br>
+        Никаких слитых баз и нарушений приватности.<br>
+        Заявки, нарушающие закон — отклоняются без объяснений.
+      </div>
+    </div>
+    <div>
+      <div style="font-size:9px;letter-spacing:.25em;text-transform:uppercase;color:var(--muted);margin-bottom:24px">— Форма запроса</div>
+      <div style="display:flex;flex-direction:column;gap:20px">
+        <div><label class="fl">Ваш позывной</label><input class="fi" id="oNick" type="text" placeholder="ANONYMOUS"></div>
+        <div>
+          <label class="fl">Тип запроса</label>
+          <select class="fi" id="oType" style="appearance:none;cursor:pointer;background:var(--bg);color:var(--text)">
+            <option value="" disabled selected>Выбери тип...</option>
+            <option>Поиск по никнейму</option>
+            <option>Анализ цифрового следа</option>
+            <option>Верификация данных</option>
+            <option>Мониторинг организаций</option>
+            <option>Другое</option>
+          </select>
+        </div>
+        <div><label class="fl">Описание задачи</label><textarea class="fta" id="oDesc" rows="5" placeholder="Опиши задачу максимально подробно. Только публичные данные."></textarea></div>
+        <div><label class="fl">Цель запроса</label><textarea class="fta" id="oGoal" rows="3" placeholder="Зачем тебе это нужно? (журналистика, верификация, личная безопасность...)"></textarea></div>
+        <button class="btn-join" id="osintBtn" onclick="sendOsint()">▶ Отправить запрос</button>
+        <div style="font-size:10px;color:var(--muted);line-height:1.8">Заявка поступит на рассмотрение. Среднее время ответа — 24ч.<br>Связь через <a href="https://t.me/LegionAnket_bot" target="_blank" style="color:var(--accent)">@LegionAnket_bot</a>.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="s-label reveal">// 08 — Контакт</div>
+  <div class="s-title reveal">СВЯЗЬ ЧЕРЕЗ<br><em>БЕЗОПАСНЫЕ КАНАЛЫ</em></div>
+  <div class="ci reveal">
+    <div>
+      <div class="cl"><span class="ck">Вступить</span><span class="cv"><a href="https://t.me/LegionAnket_bot" target="_blank">@LegionAnket_bot</a></span></div>
+      <div class="cl"><span class="ck">Email</span><span class="cv"><a href="mailto:LegionContact@proton.me">LegionContact@proton.me</a></span></div>
+      <div class="cl"><span class="ck">PGP ключ</span><span class="cv" style="font-size:11px;color:var(--muted2)">3A4F 9C21 BB70 E841 4D2F<br>7A91 F3C8 D502 1E6A 8B39</span></div>
+      <div class="cl"><span class="ck">Протокол</span><span class="cv" style="color:var(--muted2)">Только зашифрованные сообщения. Личные данные не требуются.</span></div>
+    </div>
+    <div class="cf">
+      <div><label class="fl">Позывной</label><input class="fi" type="text" placeholder="ANONYMOUS"></div>
+      <div><label class="fl">Сообщение</label><textarea class="fta" rows="6" placeholder="Введите сообщение..."></textarea></div>
+      <button class="btn-join" id="sendBtn" onclick="sendMsg()">▶ Отправить</button>
+    </div>
+  </div>
+</section>
+
+<!-- QUOTES -->
+<section id="quotes">
+  <div class="s-label reveal">// 09 — Голоса</div>
+  <div class="s-title reveal">ЦИТАТЫ<br><em>УЧАСТНИКОВ</em></div>
+  <div class="quotes-grid reveal">
+    <div class="quote-card">
+      <div class="quote-text">Legion дал мне понять, что анонимность — это не слабость. Это инструмент.</div>
+      <div class="quote-author">— PHANTOM, оперативник</div>
+    </div>
+    <div class="quote-card">
+      <div class="quote-text">Я пришёл за идеей. Остался ради людей, которые эту идею воплощают.</div>
+      <div class="quote-author">— SIGNAL, связной</div>
+    </div>
+    <div class="quote-card">
+      <div class="quote-text">Здесь не спрашивают кто ты. Здесь спрашивают — что ты можешь сделать.</div>
+      <div class="quote-author">— <span class="rx">███████</span>, участник</div>
+    </div>
+    <div class="quote-card">
+      <div class="quote-text">Мы не существуем. Но всё что происходит — происходит благодаря нам.</div>
+      <div class="quote-author">— M1LANCOLY, основатель</div>
+    </div>
+  </div>
+</section>
+
+<!-- ACHIEVEMENTS -->
+<section id="achievements">
+  <div class="s-label reveal">// 10 — История</div>
+  <div class="s-title reveal">ДОСТИЖЕНИЯ<br><em>ЛЕГИОНА</em></div>
+  <div class="ach-grid reveal">
+    <div class="ach-item">
+      <span class="ach-icon">⬡</span>
+      <div class="ach-name">Основан</div>
+      <div class="ach-desc">Legion создан как концепция анонимной децентрализованной организации</div>
+    </div>
+    <div class="ach-item">
+      <span class="ach-icon">◎</span>
+      <div class="ach-name">200+ участников</div>
+      <div class="ach-desc">Перейдена отметка двухсот активных участников в разных странах</div>
+    </div>
+    <div class="ach-item">
+      <span class="ach-icon">★</span>
+      <div class="ach-name">9 ячеек</div>
+      <div class="ach-desc">Сформированы автономные ячейки в 9 регионах мира</div>
+    </div>
+    <div class="ach-item">
+      <span class="ach-icon">◈</span>
+      <div class="ach-name">89 операций</div>
+      <div class="ach-desc">Завершено 89 операций с нулевым процентом провалов</div>
+    </div>
+    <div class="ach-item">
+      <span class="ach-icon">▶</span>
+      <div class="ach-name">Протокол v3</div>
+      <div class="ach-desc">Внедрён новый протокол безопасной связи между ячейками</div>
+    </div>
+    <div class="ach-item">
+      <span class="ach-icon">∞</span>
+      <div class="ach-name">Идея живёт</div>
+      <div class="ach-desc">Legion продолжает расти. Следующее достижение — твоё</div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq">
+  <div class="s-label reveal">// 11 — Вопросы</div>
+  <div class="s-title reveal">ЧАСТО<br><em>СПРАШИВАЮТ</em></div>
+  <div class="inn reveal">
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">Кто может вступить в Legion?</div>
+      <div class="faq-a">Любой человек вне зависимости от возраста, страны и профессии. Мы смотрим не на биографию, а на мотивацию и готовность действовать. Единственное требование — разделять ценности организации.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">Это законно?</div>
+      <div class="faq-a">Legion действует в рамках закона. Анонимность — это право, а не преступление. Мы не занимаемся незаконной деятельностью и не призываем к насилию. Наши инструменты — информация, осведомлённость и организация.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">Нужно ли платить за членство?</div>
+      <div class="faq-a">Нет. Legion никогда не берёт деньги за вступление или участие. Если кто-то просит у тебя деньги от имени Legion — это мошенник.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">Как сохранить анонимность?</div>
+      <div class="faq-a">Используй позывной вместо настоящего имени. Общайся через зашифрованные каналы. Не раскрывай личную информацию. Мы рекомендуем Tor Browser и ProtonMail для максимальной защиты.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">Что такое OSINT услуги Legion?</div>
+      <div class="faq-a">Мы предоставляем разведку на основе открытых источников — поиск по никнейму, анализ цифрового следа, верификацию данных. Только легальные методы, только публичная информация.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">Как связаться если я не хочу раскрывать себя?</div>
+      <div class="faq-a">Пиши через @LegionAnket_bot в Telegram — не нужно указывать настоящее имя. Или отправь зашифрованное сообщение на LegionContact@proton.me используя наш PGP ключ.</div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span class="fl-logo">LEGION</span>
+  <span style="text-align:center">We are anonymous. We are legion.<br>We do not forgive. We do not forget.</span>
+  <span>© 2026</span>
+</footer>
+
+<script>
+// ── CURSOR ────────────────────────────────────
+const cur=document.getElementById('cur'), ring=document.getElementById('curRing');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.left=mx+'px';cur.style.top=my+'px';});
+(function ar(){rx+=(mx-rx)*.1;ry+=(my-ry)*.1;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(ar);})();
+document.querySelectorAll('a,button').forEach(el=>{
+  el.addEventListener('mouseenter',()=>ring.style.transform='translate(-50%,-50%) scale(1.7)');
+  el.addEventListener('mouseleave',()=>ring.style.transform='translate(-50%,-50%) scale(1)');
+});
+
+// ── NAVBAR ────────────────────────────────────
+window.addEventListener('scroll',()=>document.getElementById('nav').classList.toggle('scrolled',scrollY>60));
+
+// ── LIVE COUNTER ─────────────────────────────
+let base=247;
+const lEl=document.getElementById('liveNum'), cEl=document.getElementById('sCnt');
+function flicker(){
+  if(Math.random()<0.35){base=Math.max(200,base+(Math.random()<0.55?1:-1));lEl.textContent=base;cEl.textContent=base;}
+  setTimeout(flicker,900+Math.random()*2600);
+}
+flicker();
+
+// ── STAT COUNTS ───────────────────────────────
+function cu(el,t,d=1400){let s=0;const st=t/(d/16);const tm=setInterval(()=>{s+=st;if(s>=t){s=t;clearInterval(tm);}el.textContent=Math.floor(s);},16);}
+const obs2=new IntersectionObserver(e=>{if(e[0].isIntersecting){cu(document.getElementById('sOps'),89);cu(document.getElementById('sYrs'),5,900);obs2.disconnect();}},{threshold:.3});
+obs2.observe(document.getElementById('sOps'));
+
+// ── REVEAL ───────────────────────────────────
+const ro=new IntersectionObserver(es=>es.forEach((e,i)=>{if(e.isIntersecting){setTimeout(()=>e.target.classList.add('on'),i*70);ro.unobserve(e.target);}}),{threshold:.08});
+document.querySelectorAll('.reveal').forEach(el=>ro.observe(el));
+
+// ── MAP ──────────────────────────────────────
+const wmap=document.getElementById('wmap'), mc=wmap.getContext('2d');
+const cells=[
+  {name:'Россия',code:'RU',x:.62,y:.22,t:'a',v:'47 участников'},
+  {name:'Украина',code:'UA',x:.57,y:.28,t:'a',v:'31 участник'},
+  {name:'Беларусь',code:'BY',x:.555,y:.24,t:'a',v:'18 участников'},
+  {name:'Молдова',code:'MD',x:.56,y:.295,t:'a',v:'8 участников'},
+  {name:'Казахстан',code:'KZ',x:.65,y:.30,t:'a',v:'12 участников'},
+  {name:'Германия',code:'DE',x:.50,y:.27,t:'a',v:'24 участника'},
+  {name:'США',code:'US',x:.20,y:.32,t:'a',v:'38 участников'},
+  {name:'Польша',code:'PL',x:.53,y:.26,t:'a',v:'11 участников'},
+  {name:'UK',code:'GB',x:.47,y:.25,t:'w',v:'9 наблюдателей'},
+  {name:'Франция',code:'FR',x:.49,y:.29,t:'w',v:'7 наблюдателей'},
+  {name:'Бразилия',code:'BR',x:.32,y:.58,t:'w',v:'5 наблюдателей'},
+  {name:'Япония',code:'JP',x:.82,y:.32,t:'w',v:'6 наблюдателей'},
+  {name:'███████',code:'??',x:.72,y:.38,t:'s',v:'Засекречено'},
+];
+
+let pulse=0;
+function drawMap(){
+  const W=wmap.width,H=wmap.height;
+  mc.clearRect(0,0,W,H);
+  mc.strokeStyle='rgba(255,255,255,0.025)';mc.lineWidth=.5;
+  for(let x=0;x<W;x+=W/14){mc.beginPath();mc.moveTo(x,0);mc.lineTo(x,H);mc.stroke();}
+  for(let y=0;y<H;y+=H/7){mc.beginPath();mc.moveTo(0,y);mc.lineTo(W,y);mc.stroke();}
+  // connection lines
+  const act=cells.filter(c=>c.t==='a');
+  mc.strokeStyle='rgba(200,255,0,0.035)';mc.lineWidth=1;
+  for(let i=0;i<act.length;i++)for(let j=i+1;j<act.length;j++){mc.beginPath();mc.moveTo(act[i].x*W,act[i].y*H);mc.lineTo(act[j].x*W,act[j].y*H);mc.stroke();}
+  // dots
+  cells.forEach(c=>{
+    const px=c.x*W,py=c.y*H;
+    const col=c.t==='a'?'#c8ff00':c.t==='s'?'#ff2222':'#555';
+    if(c.t==='a'){
+      const r=(pulse%60)/60;
+      mc.beginPath();mc.arc(px,py,8+r*8,0,Math.PI*2);
+      mc.strokeStyle=`rgba(200,255,0,${0.15*(1-r)})`;mc.lineWidth=1;mc.stroke();
+    }
+    mc.beginPath();mc.arc(px,py,c.t==='w'?3:5,0,Math.PI*2);
+    mc.fillStyle=col;mc.fill();
+    mc.font="9px 'Share Tech Mono'";
+    mc.fillStyle=c.t==='s'?'rgba(255,34,34,0.55)':'rgba(200,255,0,0.45)';
+    mc.fillText(c.code,px+7,py-4);
+  });
+  pulse++;
+}
+
+function resizeMap(){wmap.width=wmap.offsetWidth;wmap.height=480;drawMap();}
+window.addEventListener('resize',resizeMap);
+setTimeout(resizeMap,100);
+setInterval(drawMap,50);
+
+wmap.addEventListener('mousemove',e=>{
+  const r=wmap.getBoundingClientRect();
+  const ex=(e.clientX-r.left)/wmap.width, ey=(e.clientY-r.top)/wmap.height;
+  let hit=null;
+  cells.forEach(c=>{const dx=c.x-ex,dy=c.y-ey;if(Math.sqrt(dx*dx+dy*dy)<0.028)hit=c;});
+  const tt=document.getElementById('mtt');
+  if(hit){tt.style.display='block';tt.style.left=(e.clientX-r.left+16)+'px';tt.style.top=(e.clientY-r.top-50)+'px';document.getElementById('ttc').textContent=hit.code;document.getElementById('ttn').textContent=hit.name;document.getElementById('ttv').textContent=hit.v;}
+  else tt.style.display='none';
+});
+wmap.addEventListener('mouseleave',()=>document.getElementById('mtt').style.display='none');
+
+function sendOsint(){
+  const nick=document.getElementById('oNick').value||'ANONYMOUS';
+  const type=document.getElementById('oType').value||'Не указано';
+  const desc=document.getElementById('oDesc').value||'';
+  const goal=document.getElementById('oGoal').value||'—';
+  const btn=document.getElementById('osintBtn');
+  if(!desc.trim()){btn.textContent='⚠ Заполни описание';btn.style.background='#1a0000';btn.style.color='var(--red)';setTimeout(()=>{btn.innerHTML='▶ Отправить запрос';btn.style.background='';btn.style.color='';},2000);return;}
+  window.open('https://t.me/LegionAnket_bot?start=osint','_blank');
+  btn.textContent='✓ Запрос отправлен';btn.style.background='#111';btn.style.color='var(--accent)';
+  setTimeout(()=>{btn.innerHTML='▶ Отправить запрос';btn.style.background='';btn.style.color='';},3000);
+}
+
+function sendMsg(){
+  const b=document.getElementById('sendBtn');
+  b.textContent='✓ Отправлено';b.style.background='#111';b.style.color='var(--accent)';
+  setTimeout(()=>{b.innerHTML='▶ Отправить';b.style.background='';b.style.color='';},3000);
+}
+
+// SCROLL PROGRESS
+window.addEventListener('scroll',()=>{
+  const sb=document.getElementById('scrollBar');
+  const pct=window.scrollY/(document.body.scrollHeight-window.innerHeight)*100;
+  sb.style.width=pct+'%';
+  document.getElementById('nav').classList.toggle('scrolled',scrollY>60);
+});
+
+// THEME TOGGLE
+document.getElementById('themeBtn').addEventListener('click',()=>{
+  document.body.classList.toggle('light');
+  document.getElementById('themeBtn').textContent=document.body.classList.contains('light')?'☾':'☀';
+});
+
+// FAQ TOGGLE
+function toggleFaq(el){
+  const item=el.parentElement;
+  document.querySelectorAll('.faq-item.open').forEach(i=>{if(i!==item)i.classList.remove('open');});
+  item.classList.toggle('open');
+}
+
+// PARTICLES
+(function(){
+  const canvas=document.getElementById('particles');
+  if(!canvas)return;
+  const ctx=canvas.getContext('2d');
+  let W,H,pts=[];
+  function resize(){
+    W=canvas.width=canvas.offsetWidth;
+    H=canvas.height=canvas.offsetHeight;
+  }
+  resize();
+  window.addEventListener('resize',resize);
+  for(let i=0;i<60;i++) pts.push({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.3,vy:(Math.random()-.5)*.3,r:Math.random()*1.5+.5});
+  function getAccent(){return getComputedStyle(document.documentElement).getPropertyValue('--accent').trim()||'#c8ff00';}
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    const ac=getAccent();
+    const isLight=document.body.classList.contains('light');
+    const pa=isLight?'rgba(74,122,0,0.4)':'rgba(200,255,0,0.5)';
+    const la=isLight?0.08:0.12;
+    pts.forEach(p=>{
+      p.x+=p.vx; p.y+=p.vy;
+      if(p.x<0)p.x=W; if(p.x>W)p.x=0;
+      if(p.y<0)p.y=H; if(p.y>H)p.y=0;
+      ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+      ctx.fillStyle=pa;ctx.fill();
+    });
+    for(let i=0;i<pts.length;i++)for(let j=i+1;j<pts.length;j++){
+      const dx=pts[i].x-pts[j].x,dy=pts[i].y-pts[j].y,d=Math.sqrt(dx*dx+dy*dy);
+      if(d<120){ctx.beginPath();ctx.moveTo(pts[i].x,pts[i].y);ctx.lineTo(pts[j].x,pts[j].y);ctx.strokeStyle=`rgba(${isLight?'74,122,0':'200,255,0'},${la*(1-d/120)})`;ctx.lineWidth=.5;ctx.stroke();}
+    }
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+</script>
+</body>
+</html>
