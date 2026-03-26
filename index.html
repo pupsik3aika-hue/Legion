@@ -1,0 +1,2690 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LEGION — Imperium Sine Fine</title>
+<meta name="description" content="Анонимная децентрализованная организация. Нас нельзя найти — нас нельзя уничтожить.">
+<meta property="og:title" content="LEGION — Imperium Sine Fine">
+<meta property="og:description" content="Анонимная децентрализованная организация. We are anonymous. We are legion.">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#040406">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23040406'/%3E%3Crect x='1' y='1' width='30' height='30' rx='6.5' fill='none' stroke='%23b08820' stroke-width='0.6' opacity='0.5'/%3E%3Cpath d='M16 26 C10 22 7 18 7 13 C7 9.5 11 7 16 11 C21 7 25 9.5 25 13 C25 18 22 22 16 26Z' fill='none' stroke='%23c09828' stroke-width='1.2'/%3E%3Cellipse cx='16' cy='11' rx='4' ry='3.5' fill='%23d4aa38'/%3E%3Cpath d='M13 11 C8 8 5 10 5 13' fill='none' stroke='%23c09828' stroke-width='1.5' stroke-linecap='round'/%3E%3Cpath d='M19 11 C24 8 27 10 27 13' fill='none' stroke='%23c09828' stroke-width='1.5' stroke-linecap='round'/%3E%3Cpath d='M14 9.5 C16 6 18 9.5 16 8Z' fill='%23d4aa38'/%3E%3Ctext x='16' y='22' text-anchor='middle' font-family='serif' font-size='5' font-weight='700' fill='%23c09828' letter-spacing='1'%3ELEGION%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Cinzel+Decorative:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+/* ═══════════════════════════════════════════════════════════════
+   LEGION — Apple-Level Imperial Redesign
+   Philosophy: Imperium Sine Fine — Власть без предела
+   Aesthetic: iOS Human Interface Guidelines + Imperial Rome
+   Palette: Void / Obsidian / Gold / Crimson
+   Typography: Cinzel Imperial + Cormorant Garamond Aristocratic
+   Motion: spring physics · parallax · micro-interactions
+   Layout: 8px grid · clamp responsive · full-screen sections
+═══════════════════════════════════════════════════════════════ */
+
+/* ── CSS CUSTOM PROPERTIES ── */
+:root {
+  /* Surface hierarchy */
+  --void:       #000000;
+  --obsidian:   #040406;
+  --graphite:   #080810;
+  --carbon:     #0e0e16;
+  --charcoal:   #14141e;
+  --iron:       #1e1e28;
+  --ash:        #30303e;
+  --dust:       #4e4e62;
+  --fog:        #72728a;
+  --mist:       #a8a8c0;
+  --smoke:      #cccce0;
+  --white:      #f0f0f8;
+
+  /* Gold spectrum */
+  --gold-deep:  #6a4c0e;
+  --gold-base:  #b08820;
+  --gold-mid:   #c09828;
+  --gold-warm:  #d4aa38;
+  --gold-light: #e8c865;
+  --gold-pale:  #f4e2a5;
+  --gold-glow:  rgba(192, 152, 40, 0.18);
+
+  /* Blood / Crimson */
+  --blood:      #6e1010;
+  --crimson:    #a82828;
+
+  /* Glass system — iOS-grade */
+  --glass-1:    rgba(8,   8,  16, 0.78);
+  --glass-2:    rgba(14, 14,  22, 0.85);
+  --glass-3:    rgba(20, 20,  32, 0.72);
+  --glass-bd:   rgba(192, 152, 40, 0.13);
+  --glass-hi:   rgba(255, 255, 255, 0.035);
+  --glass-blur: blur(32px) saturate(140%);
+
+  /* Typography */
+  --font-imperial: 'Cinzel', serif;
+  --font-noble:    'Cormorant Garamond', serif;
+  --font-deco:     'Cinzel Decorative', serif;
+
+  /* Motion — iOS spring physics */
+  --ease-ios:    cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-out:    cubic-bezier(0.16, 1, 0.3, 1);
+  --dur-fast:    0.25s;
+  --dur-med:     0.45s;
+  --dur-slow:    0.85s;
+
+  /* 8px spatial grid */
+  --sp-1:  8px;
+  --sp-2:  16px;
+  --sp-3:  24px;
+  --sp-4:  32px;
+  --sp-5:  40px;
+  --sp-6:  48px;
+  --sp-8:  64px;
+  --sp-10: 80px;
+  --sp-12: 96px;
+
+  /* Layout */
+  --max-w:   1320px;
+  --pad-xl:  clamp(32px, 6vw, 100px);
+  --pad-lg:  clamp(24px, 4vw, 64px);
+  --pad-md:  clamp(16px, 3vw, 40px);
+  --r:       14px;
+  --r-sm:    8px;
+  --r-pill:  100px;
+
+  /* Elevation */
+  --shadow-sm:  0 2px 12px rgba(0,0,0,0.4), 0 1px 4px rgba(0,0,0,0.6);
+  --shadow-md:  0 8px 40px rgba(0,0,0,0.5), 0 2px 12px rgba(0,0,0,0.7);
+  --shadow-lg:  0 24px 64px rgba(0,0,0,0.6), 0 8px 24px rgba(0,0,0,0.8);
+  --shadow-gold: 0 4px 24px rgba(192,152,40,0.22);
+}
+
+
+/* ── RESET + BASE ── */
+*, *::before, *::after {
+  margin: 0; padding: 0;
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html {
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+  font-size: 16px;
+}
+
+body {
+  background: var(--obsidian);
+  color: var(--mist);
+  font-family: var(--font-noble);
+  line-height: 1.7;
+  overflow-x: hidden;
+  cursor: none;
+}
+
+/* ── FILM GRAIN OVERLAY ── */
+body::after {
+  content: '';
+  position: fixed; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.88' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.028'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 9997;
+  mix-blend-mode: overlay;
+}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar { width: 2px; }
+::-webkit-scrollbar-track { background: var(--obsidian); }
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, var(--gold-deep), var(--gold-mid));
+  border-radius: 2px;
+}
+
+/* ── SCROLL PROGRESS BAR ── */
+#scrollBar {
+  position: fixed; top: 0; left: 0; height: 1px; width: 0%;
+  background: linear-gradient(90deg, var(--gold-deep), var(--gold-warm), var(--gold-light), var(--gold-warm), var(--gold-deep));
+  z-index: 9999;
+  transition: width 0.06s linear;
+  box-shadow: 0 0 12px rgba(192,152,40,0.4);
+}
+
+
+/* ═══════════════════════════════════════════════
+   CUSTOM CURSOR — iOS precision
+═══════════════════════════════════════════════ */
+.cursor-dot {
+  width: 4px; height: 4px;
+  background: var(--gold-warm);
+  border-radius: 50%;
+  position: fixed; pointer-events: none;
+  z-index: 99999;
+  transform: translate(-50%, -50%);
+  transition: background 0.2s, width 0.15s var(--ease-spring), height 0.15s var(--ease-spring);
+  will-change: left, top;
+}
+.cursor-ring {
+  width: 36px; height: 36px;
+  border: 1px solid rgba(192, 152, 40, 0.28);
+  border-radius: 50%;
+  position: fixed; pointer-events: none;
+  z-index: 99998;
+  transform: translate(-50%, -50%);
+  transition:
+    border-color 0.3s,
+    width 0.3s var(--ease-out),
+    height 0.3s var(--ease-out),
+    background 0.3s;
+  will-change: left, top;
+}
+.cursor-ring.hover {
+  width: 52px; height: 52px;
+  border-color: rgba(192, 152, 40, 0.5);
+  background: rgba(192, 152, 40, 0.04);
+}
+
+
+/* ═══════════════════════════════════════════════
+   ORNAMENT — Imperial divider
+═══════════════════════════════════════════════ */
+.ornament {
+  display: flex; align-items: center; gap: var(--sp-2);
+  margin: var(--sp-2) 0;
+}
+.ornament::before, .ornament::after {
+  content: '';
+  flex: 1; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(192,152,40,0.3), transparent);
+}
+.ornament-center {
+  color: var(--gold-mid);
+  font-size: 10px;
+  letter-spacing: 0.4em;
+  font-family: var(--font-imperial);
+}
+
+
+/* ═══════════════════════════════════════════════
+   NAVIGATION — Safari-style iOS glassmorphism
+═══════════════════════════════════════════════ */
+nav {
+  position: fixed; top: 0; left: 0; right: 0;
+  z-index: 500;
+  display: flex; justify-content: space-between; align-items: center;
+  padding: var(--sp-4) var(--pad-xl);
+  transition: padding var(--dur-med) var(--ease-ios),
+              background var(--dur-med) var(--ease-ios),
+              border-color var(--dur-med),
+              box-shadow var(--dur-med);
+  border-bottom: 1px solid transparent;
+}
+nav.scrolled {
+  background: rgba(4, 4, 6, 0.92);
+  border-color: rgba(192, 152, 40, 0.09);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  padding: 18px var(--pad-xl);
+  box-shadow:
+    0 1px 0 rgba(192, 152, 40, 0.07),
+    0 12px 40px rgba(0, 0, 0, 0.5);
+}
+
+.nav-logo {
+  font-family: var(--font-deco);
+  font-size: 17px;
+  letter-spacing: 0.52em;
+  color: var(--gold-warm);
+  text-decoration: none;
+  position: relative;
+  text-shadow: 0 0 56px rgba(192, 152, 40, 0.32);
+  transition: text-shadow var(--dur-med);
+}
+.nav-logo:hover { text-shadow: 0 0 80px rgba(192, 152, 40, 0.55); }
+.nav-logo::after {
+  content: '';
+  position: absolute; bottom: -6px; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold-warm), transparent);
+  transform: scaleX(0); transform-origin: center;
+  transition: transform var(--dur-med) var(--ease-ios);
+}
+.nav-logo:hover::after { transform: scaleX(1); }
+
+/* Nav links */
+.nav-links {
+  display: flex; gap: var(--sp-5); list-style: none;
+  align-items: center;
+}
+.nav-links a {
+  font-family: var(--font-imperial);
+  color: var(--fog);
+  font-size: 9px;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: color var(--dur-fast);
+  position: relative; padding-bottom: 3px;
+}
+.nav-links a::after {
+  content: '';
+  position: absolute; bottom: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold-mid), transparent);
+  transform: scaleX(0); transform-origin: center;
+  transition: transform var(--dur-med) var(--ease-ios);
+}
+.nav-links a:hover { color: var(--gold-light); }
+.nav-links a:hover::after { transform: scaleX(1); }
+
+/* Nav CTA pill — iOS style */
+.nav-cta {
+  font-family: var(--font-imperial);
+  font-size: 9px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--void);
+  background: linear-gradient(145deg, var(--gold-mid), var(--gold-warm));
+  padding: 10px 28px;
+  text-decoration: none;
+  border-radius: var(--r-pill);
+  transition:
+    transform var(--dur-fast) var(--ease-spring),
+    box-shadow var(--dur-fast),
+    background var(--dur-fast);
+  box-shadow:
+    0 2px 16px rgba(192, 152, 40, 0.28),
+    inset 0 1px 0 rgba(255, 255, 255, 0.14);
+}
+.nav-cta:hover {
+  background: linear-gradient(145deg, var(--gold-warm), var(--gold-light));
+  transform: translateY(-1px);
+  box-shadow:
+    0 8px 28px rgba(192, 152, 40, 0.42),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+.nav-cta:active { transform: translateY(0px); }
+
+/* Burger */
+.burger {
+  display: none; flex-direction: column; gap: 5px;
+  cursor: pointer; z-index: 600; padding: 6px;
+}
+.burger span {
+  display: block; width: 22px; height: 1px;
+  background: var(--gold-warm);
+  transition: all var(--dur-med) var(--ease-ios);
+  transform-origin: center;
+}
+.burger.open span:nth-child(1) { transform: rotate(45deg) translate(4px, 4px); }
+.burger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+.burger.open span:nth-child(3) { transform: rotate(-45deg) translate(4px, -4px); }
+
+/* Mobile menu */
+.mob-menu {
+  position: fixed; inset: 0;
+  background: rgba(2, 2, 6, 0.97);
+  backdrop-filter: blur(40px) saturate(120%);
+  -webkit-backdrop-filter: blur(40px) saturate(120%);
+  z-index: 490;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: var(--sp-4);
+  transform: translateY(-100%);
+  transition: transform 0.55s cubic-bezier(0.77, 0, 0.175, 1);
+}
+.mob-menu.open { transform: translateY(0); }
+.mob-menu a {
+  font-family: var(--font-imperial);
+  font-size: 20px;
+  letter-spacing: 0.35em;
+  color: var(--fog);
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: color var(--dur-med), letter-spacing var(--dur-med);
+}
+.mob-menu a:hover { color: var(--gold-warm); letter-spacing: 0.45em; }
+.mob-menu .mob-divider {
+  width: 56px; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(192,152,40,0.35), transparent);
+}
+.mob-menu .mob-cta {
+  margin-top: var(--sp-2);
+  font-family: var(--font-imperial);
+  font-size: 10px; letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: var(--void);
+  background: linear-gradient(145deg, var(--gold-mid), var(--gold-warm));
+  padding: 14px 40px;
+  border-radius: var(--r-pill);
+  text-decoration: none;
+  box-shadow: var(--shadow-gold);
+}
+
+
+/* ═══════════════════════════════════════════════
+   HERO — Cinematic Imperial Full-Screen
+═══════════════════════════════════════════════ */
+#hero {
+  min-height: 100svh;
+  display: flex; flex-direction: column;
+  justify-content: center; align-items: flex-start;
+  padding: clamp(110px, 15vh, 170px) var(--pad-xl) clamp(72px, 10vh, 120px);
+  position: relative; overflow: hidden;
+}
+
+/* ── Background — Colosseum with cinematic depth ── */
+.hero-bg {
+  position: absolute; inset: 0; z-index: 0;
+}
+.hero-bg-img {
+  position: absolute; inset: -5%;
+  background-image: url('https://images.unsplash.com/photo-1552832230-c0197dd311b5?w=2000&q=85');
+  background-size: cover;
+  background-position: center 30%;
+  background-color: #0e0e16;
+  transform: scale(1.08);
+  transition: transform 0.12s linear;
+  filter: saturate(0.6) brightness(0.45);
+}
+
+/* Cinematic layered overlay — depth + atmosphere */
+.hero-bg-overlay {
+  position: absolute; inset: 0;
+  background:
+    linear-gradient(165deg,
+      rgba(4, 4, 6, 0.96) 0%,
+      rgba(4, 4, 6, 0.84) 32%,
+      rgba(4, 4, 6, 0.52) 60%,
+      rgba(4, 4, 6, 0.90) 100%),
+    radial-gradient(ellipse 70% 90% at 72% 50%,
+      rgba(192, 152, 40, 0.05) 0%,
+      transparent 65%);
+}
+
+/* Atmospheric layer */
+.hero-bg-layer1 {
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 90% 65% at 62% 42%, rgba(130, 98, 18, 0.07) 0%, transparent 65%),
+    radial-gradient(ellipse 55% 75% at 15% 85%, rgba(4, 4, 6, 0.75) 0%, transparent 60%),
+    linear-gradient(0deg, rgba(4,4,6,0.8) 0%, transparent 30%);
+}
+
+/* Subtle structural grid */
+.hero-grid {
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(192, 152, 40, 0.022) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(192, 152, 40, 0.022) 1px, transparent 1px);
+  background-size: 88px 88px;
+  mask-image: radial-gradient(ellipse 85% 70% at 50% 50%, black 25%, transparent 100%);
+}
+
+/* Vertical architectural lines */
+.hero-vlines {
+  position: absolute; right: 30%; top: 0; bottom: 0; width: 1px;
+  background: linear-gradient(180deg,
+    transparent 0%,
+    rgba(192, 152, 40, 0.12) 20%,
+    rgba(192, 152, 40, 0.08) 80%,
+    transparent 100%);
+}
+.hero-vlines::after {
+  content: '';
+  position: absolute; right: -56px; top: 0; bottom: 0; width: 1px;
+  background: linear-gradient(180deg,
+    transparent 0%,
+    rgba(192, 152, 40, 0.05) 40%,
+    transparent 100%);
+}
+
+/* ── Hero Content ── */
+.hero-content {
+  position: relative; z-index: 2;
+  max-width: 780px;
+}
+
+/* Eyebrow — with subtle slide animation */
+.hero-eyebrow {
+  display: flex; align-items: center; gap: var(--sp-3);
+  margin-bottom: var(--sp-5);
+  opacity: 0; animation: slideUp 0.9s var(--ease-out) 0.2s forwards;
+}
+.hero-eyebrow-line {
+  width: 40px; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold-warm));
+}
+.hero-eyebrow-text {
+  font-family: var(--font-imperial);
+  font-size: 9px; letter-spacing: 0.6em;
+  color: var(--gold-mid); text-transform: uppercase;
+}
+
+/* Main title */
+.hero-title {
+  font-family: var(--font-deco);
+  font-size: clamp(88px, 16vw, 208px);
+  font-weight: 700;
+  line-height: 0.86;
+  letter-spacing: 0.06em;
+  color: var(--gold-warm);
+  text-shadow:
+    0 0 120px rgba(192, 152, 40, 0.20),
+    0 6px 12px rgba(0, 0, 0, 0.95),
+    0 0 2px rgba(192, 152, 40, 0.35);
+  opacity: 0; animation: slideUp 1.1s var(--ease-out) 0.4s forwards;
+}
+
+/* Subtitle latin */
+.hero-subtitle {
+  font-family: var(--font-imperial);
+  font-size: clamp(10px, 1.1vw, 14px);
+  letter-spacing: 0.5em;
+  color: var(--dust);
+  text-transform: uppercase;
+  margin-top: var(--sp-3);
+  opacity: 0; animation: slideUp 0.9s var(--ease-out) 0.65s forwards;
+}
+
+/* One-line positioning — NEW: clarity for visitors */
+.hero-position {
+  margin-top: var(--sp-4);
+  padding: 10px 20px;
+  border-left: 2px solid rgba(192, 152, 40, 0.35);
+  background: rgba(192, 152, 40, 0.04);
+  border-radius: 0 var(--r-sm) var(--r-sm) 0;
+  display: inline-block;
+  opacity: 0; animation: slideUp 0.9s var(--ease-out) 0.8s forwards;
+}
+.hero-position-text {
+  font-family: var(--font-imperial);
+  font-size: 10px; letter-spacing: 0.3em;
+  color: var(--gold-light); text-transform: uppercase;
+}
+
+/* Divider line */
+.hero-divider {
+  width: 80px; height: 1px;
+  background: linear-gradient(90deg, var(--gold-deep), transparent);
+  margin: var(--sp-5) 0;
+  opacity: 0; animation: slideUp 0.8s var(--ease-out) 0.85s forwards;
+}
+
+/* Hero description */
+.hero-desc {
+  font-size: clamp(16px, 1.4vw, 18px);
+  font-weight: 300;
+  font-style: italic;
+  color: var(--fog);
+  line-height: 2.05;
+  max-width: 520px;
+  opacity: 0; animation: slideUp 0.9s var(--ease-out) 0.95s forwards;
+}
+.hero-desc em { color: var(--smoke); font-style: normal; font-weight: 400; }
+
+/* CTA buttons row */
+.hero-actions {
+  display: flex; gap: var(--sp-3); align-items: center; flex-wrap: wrap;
+  margin-top: var(--sp-8);
+  opacity: 0; animation: slideUp 0.9s var(--ease-out) 1.15s forwards;
+}
+
+/* ── Live stat — right side ── */
+.hero-stat {
+  position: absolute; right: var(--pad-xl); top: 50%;
+  transform: translateY(-50%);
+  text-align: right; z-index: 2;
+  opacity: 0; animation: slideUp 0.9s var(--ease-out) 1.25s forwards;
+}
+.hero-stat-number {
+  font-family: var(--font-deco);
+  font-size: clamp(76px, 9vw, 112px);
+  line-height: 1;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(192, 152, 40, 0.16);
+  letter-spacing: -0.02em;
+}
+.hero-stat-label {
+  font-family: var(--font-imperial);
+  font-size: 8px; letter-spacing: 0.32em;
+  color: var(--ash);
+  text-transform: uppercase;
+  display: flex; align-items: center; justify-content: flex-end; gap: 10px;
+  margin-top: var(--sp-1);
+}
+
+/* Pulse live indicator */
+.pulse-dot {
+  width: 6px; height: 6px;
+  background: var(--gold-warm);
+  border-radius: 50%;
+  flex-shrink: 0;
+  animation: pulseDot 2.4s ease infinite;
+}
+@keyframes pulseDot {
+  0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(192, 152, 40, 0.5); }
+  50% { opacity: 0.7; box-shadow: 0 0 0 12px rgba(192, 152, 40, 0); }
+}
+
+/* Scroll hint */
+.scroll-hint {
+  position: absolute; bottom: var(--sp-6); left: var(--pad-xl);
+  z-index: 2;
+  font-family: var(--font-imperial);
+  font-size: 8px; letter-spacing: 0.44em;
+  color: var(--ash); text-transform: uppercase;
+  display: flex; align-items: center; gap: var(--sp-3);
+  opacity: 0; animation: slideUp 0.7s var(--ease-out) 1.6s forwards;
+}
+.scroll-arrow {
+  width: 1px; height: 48px;
+  background: linear-gradient(180deg, transparent, var(--gold-deep));
+  animation: scrollAnim 2.4s ease infinite;
+}
+@keyframes scrollAnim {
+  0%, 100% { transform: scaleY(0.4) translateY(-8px); opacity: 0.25; }
+  50% { transform: scaleY(1) translateY(0); opacity: 0.9; }
+}
+
+/* Core entry animation */
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(32px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+
+/* ═══════════════════════════════════════════════
+   BUTTONS — iOS-grade premium interactions
+═══════════════════════════════════════════════ */
+.btn-primary {
+  display: inline-flex; align-items: center; gap: 12px;
+  padding: 16px 44px;
+  font-family: var(--font-imperial);
+  font-size: 10px; letter-spacing: 0.28em; text-transform: uppercase;
+  color: var(--void);
+  background: linear-gradient(148deg, var(--gold-mid) 0%, var(--gold-warm) 50%, var(--gold-mid) 100%);
+  background-size: 200% 100%;
+  text-decoration: none;
+  border-radius: var(--r-pill);
+  transition:
+    transform var(--dur-fast) var(--ease-spring),
+    box-shadow var(--dur-fast),
+    background-position var(--dur-med);
+  position: relative; overflow: hidden;
+  border: none; cursor: pointer;
+  box-shadow:
+    0 3px 20px rgba(192, 152, 40, 0.30),
+    inset 0 1px 0 rgba(255, 255, 255, 0.16),
+    inset 0 -1px 0 rgba(0,0,0,0.12);
+}
+.btn-primary::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(148deg, var(--gold-warm), var(--gold-light));
+  opacity: 0; transition: opacity var(--dur-med);
+  border-radius: inherit;
+}
+.btn-primary:hover::before { opacity: 1; }
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 10px 36px rgba(192, 152, 40, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.22);
+}
+.btn-primary:active { transform: translateY(0px) scale(0.98); }
+.btn-primary span { position: relative; z-index: 1; }
+.btn-primary svg { position: relative; z-index: 1; transition: transform var(--dur-med) var(--ease-spring); }
+.btn-primary:hover svg { transform: translateX(4px); }
+
+.btn-ghost {
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 16px 36px;
+  font-family: var(--font-imperial);
+  font-size: 10px; letter-spacing: 0.24em; text-transform: uppercase;
+  color: var(--fog);
+  border: 1px solid rgba(192, 152, 40, 0.2);
+  background: rgba(192, 152, 40, 0.04);
+  text-decoration: none;
+  border-radius: var(--r-pill);
+  transition:
+    color var(--dur-fast),
+    border-color var(--dur-fast),
+    background var(--dur-fast),
+    transform var(--dur-fast) var(--ease-spring),
+    box-shadow var(--dur-fast);
+  backdrop-filter: blur(12px);
+}
+.btn-ghost:hover {
+  color: var(--gold-light);
+  border-color: rgba(192, 152, 40, 0.48);
+  background: rgba(192, 152, 40, 0.09);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(192, 152, 40, 0.14);
+}
+.btn-ghost:active { transform: translateY(0px); }
+
+
+/* ═══════════════════════════════════════════════
+   SECTION BASE — full-screen breathing
+═══════════════════════════════════════════════ */
+section {
+  padding: clamp(88px, 12vh, 152px) var(--pad-xl);
+  border-top: 1px solid rgba(192, 152, 40, 0.07);
+  position: relative;
+}
+
+.section-label {
+  font-family: var(--font-imperial);
+  font-size: 9px; letter-spacing: 0.58em;
+  color: var(--gold-mid);
+  text-transform: uppercase;
+  margin-bottom: var(--sp-3);
+  display: flex; align-items: center; gap: var(--sp-2);
+}
+.section-label::before {
+  content: '';
+  display: block; width: 32px; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold-mid));
+  flex-shrink: 0;
+}
+
+.section-title {
+  font-family: var(--font-imperial);
+  font-size: clamp(40px, 5vw, 68px);
+  font-weight: 700;
+  line-height: 1.04;
+  letter-spacing: 0.04em;
+  margin-bottom: var(--sp-10);
+  color: var(--smoke);
+}
+.section-title em {
+  font-style: normal;
+  color: var(--gold-warm);
+  display: block;
+}
+
+
+/* ═══════════════════════════════════════════════
+   ABOUT — What we are
+═══════════════════════════════════════════════ */
+#about { background: var(--graphite); }
+
+.about-grid {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr;
+  gap: clamp(56px, 9vw, 112px);
+  align-items: start;
+}
+
+.about-text p {
+  font-size: clamp(15px, 1.2vw, 17px);
+  font-weight: 300;
+  color: var(--fog); line-height: 2.0;
+  margin-bottom: var(--sp-3);
+}
+.about-text p:first-child {
+  font-size: clamp(17px, 1.5vw, 20px);
+  color: var(--mist);
+  font-style: italic;
+  margin-bottom: var(--sp-4);
+}
+
+/* Stats — glass mosaic */
+.stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px;
+  background: rgba(192, 152, 40, 0.08);
+  border: 1px solid rgba(192, 152, 40, 0.08);
+  border-radius: var(--r);
+  overflow: hidden;
+}
+.stat-card {
+  background: var(--carbon);
+  padding: var(--sp-4) var(--sp-4);
+  transition:
+    background var(--dur-med) var(--ease-ios),
+    transform var(--dur-fast) var(--ease-spring);
+  position: relative; overflow: hidden;
+}
+.stat-card::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold-mid), transparent);
+  transform: scaleX(0); transition: transform var(--dur-med) var(--ease-ios);
+}
+.stat-card:hover { background: var(--charcoal); }
+.stat-card:hover::before { transform: scaleX(1); }
+
+.stat-number {
+  font-family: var(--font-imperial);
+  font-size: clamp(38px, 3.5vw, 50px); font-weight: 700;
+  line-height: 1;
+  color: var(--gold-warm);
+  display: flex; align-items: baseline; gap: 4px;
+}
+.stat-number sup { font-size: 18px; color: var(--gold-mid); }
+.stat-label {
+  font-family: var(--font-imperial);
+  font-size: 9px; letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--ash); margin-top: var(--sp-1);
+}
+.stat-card.live .stat-number { color: var(--gold-light); }
+
+
+/* ═══════════════════════════════════════════════
+   MANIFESTO — Code of the Legion
+═══════════════════════════════════════════════ */
+#manifesto { background: var(--obsidian); }
+.manifesto-inner { max-width: 840px; }
+
+.manifesto-item {
+  display: grid;
+  grid-template-columns: 64px 1fr;
+  gap: var(--sp-5); align-items: start;
+  padding: var(--sp-5) 0;
+  border-bottom: 1px solid rgba(192, 152, 40, 0.07);
+  transition: background var(--dur-med) var(--ease-ios);
+}
+.manifesto-item:last-child { border-bottom: none; }
+
+.manifesto-num {
+  font-family: var(--font-imperial);
+  font-size: 38px; font-weight: 700;
+  color: rgba(192, 152, 40, 0.09);
+  line-height: 1.1;
+  transition: color var(--dur-med);
+}
+.manifesto-item:hover .manifesto-num { color: rgba(192, 152, 40, 0.28); }
+
+.manifesto-title {
+  font-family: var(--font-imperial);
+  font-size: clamp(15px, 1.4vw, 19px);
+  letter-spacing: 0.04em;
+  color: var(--mist); margin-bottom: var(--sp-2);
+  transition: color var(--dur-fast);
+}
+.manifesto-item:hover .manifesto-title { color: var(--gold-light); }
+
+.manifesto-body {
+  font-size: clamp(13px, 1.1vw, 15px);
+  font-style: italic;
+  color: var(--dust); line-height: 2;
+}
+
+
+/* ═══════════════════════════════════════════════
+   TEAM — No names, only roles
+═══════════════════════════════════════════════ */
+#team { background: var(--graphite); }
+
+.team-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(272px, 1fr));
+  gap: 2px;
+  background: rgba(192, 152, 40, 0.06);
+  border-radius: var(--r);
+  overflow: hidden;
+}
+
+.member-card {
+  background: var(--carbon);
+  padding: var(--sp-6) var(--sp-5);
+  position: relative; overflow: hidden;
+  transition:
+    background var(--dur-med) var(--ease-ios),
+    transform var(--dur-fast) var(--ease-spring);
+}
+.member-card::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(148deg, rgba(192, 152, 40, 0.045) 0%, transparent 55%);
+  opacity: 0; transition: opacity var(--dur-med);
+}
+.member-card:hover { background: var(--charcoal); }
+.member-card:hover::before { opacity: 1; }
+
+.member-accent {
+  position: absolute; left: 0; top: 0; bottom: 0; width: 1px;
+  background: linear-gradient(180deg, transparent 10%, var(--gold-warm) 50%, transparent 90%);
+  transform: scaleY(0); transition: transform 0.55s var(--ease-ios);
+  transform-origin: center;
+}
+.member-card:hover .member-accent { transform: scaleY(1); }
+
+.member-top-accent {
+  position: absolute; top: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(192, 152, 40, 0.38), transparent);
+  opacity: 0; transition: opacity var(--dur-med);
+}
+.member-card:hover .member-top-accent { opacity: 1; }
+
+.member-id {
+  position: absolute; top: var(--sp-3); right: var(--sp-3);
+  font-family: var(--font-imperial);
+  font-size: 8px; letter-spacing: 0.22em;
+  color: rgba(192, 152, 40, 0.18);
+}
+
+.member-icon {
+  width: 48px; height: 48px;
+  border: 1px solid rgba(192, 152, 40, 0.14);
+  border-radius: var(--r-sm);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; color: var(--gold-deep);
+  margin-bottom: var(--sp-3);
+  position: relative; z-index: 1;
+  background: rgba(192, 152, 40, 0.04);
+  transition:
+    border-color var(--dur-fast),
+    background var(--dur-fast),
+    color var(--dur-fast);
+}
+.member-card:hover .member-icon {
+  border-color: rgba(192, 152, 40, 0.32);
+  background: rgba(192, 152, 40, 0.08);
+  color: var(--gold-mid);
+}
+
+.member-badge {
+  font-family: var(--font-imperial);
+  font-size: 8px; letter-spacing: 0.3em; text-transform: uppercase;
+  color: var(--gold-mid);
+  border: 1px solid rgba(192, 152, 40, 0.2);
+  border-radius: 20px;
+  padding: 4px 14px;
+  display: inline-block; margin-bottom: var(--sp-2);
+  position: relative; z-index: 1;
+  background: rgba(192, 152, 40, 0.06);
+}
+
+.member-name {
+  font-family: var(--font-imperial);
+  font-size: clamp(18px, 1.8vw, 22px); letter-spacing: 0.07em;
+  color: var(--mist); margin-bottom: 6px;
+  position: relative; z-index: 1;
+  transition: color var(--dur-fast);
+}
+.member-card:hover .member-name { color: var(--smoke); }
+
+.member-role {
+  font-family: var(--font-imperial);
+  font-size: 9px; letter-spacing: 0.3em; text-transform: uppercase;
+  color: var(--gold-mid); margin-bottom: var(--sp-3);
+  position: relative; z-index: 1;
+}
+
+.member-bio {
+  font-size: 13px; font-style: italic;
+  color: var(--dust); line-height: 1.95;
+  position: relative; z-index: 1;
+}
+
+.redacted {
+  background: var(--iron); color: transparent;
+  user-select: none; border-radius: 2px;
+  letter-spacing: 0.05em; padding: 0 2px;
+}
+
+
+/* ═══════════════════════════════════════════════
+   OPERATIONS — Archive
+═══════════════════════════════════════════════ */
+#ops { background: var(--obsidian); }
+
+.ops-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 2px;
+  background: rgba(192, 152, 40, 0.05);
+  border-radius: var(--r); overflow: hidden;
+}
+
+.op-card {
+  background: var(--carbon);
+  padding: var(--sp-6);
+  position: relative; overflow: hidden;
+  transition: background var(--dur-med) var(--ease-ios);
+}
+.op-card.featured { grid-column: span 2; }
+.op-card:hover { background: var(--charcoal); }
+
+.op-top-line {
+  position: absolute; top: 0; left: 0; right: 0; height: 1px;
+  background: var(--iron); transition: background var(--dur-med);
+}
+.op-card:hover .op-top-line {
+  background: linear-gradient(90deg, transparent, var(--gold-mid), transparent);
+}
+
+.op-status {
+  display: inline-flex; align-items: center; gap: 9px;
+  font-family: var(--font-imperial);
+  font-size: 9px; letter-spacing: 0.3em; text-transform: uppercase;
+  margin-bottom: var(--sp-3);
+  padding: 5px 16px; border-radius: 20px;
+}
+.op-status.active {
+  color: var(--gold-warm);
+  background: rgba(192, 152, 40, 0.09);
+  border: 1px solid rgba(192, 152, 40, 0.22);
+}
+.op-status.active::before {
+  content: '●'; animation: pulseDot 1.6s infinite;
+}
+.op-status.done {
+  color: var(--ash);
+  background: rgba(48, 48, 62, 0.4);
+  border: 1px solid rgba(48, 48, 62, 0.5);
+}
+.op-status.done::before { content: '●'; }
+.op-status.classified {
+  color: var(--crimson);
+  background: rgba(110, 16, 16, 0.09);
+  border: 1px solid rgba(110, 16, 16, 0.28);
+}
+.op-status.classified::before { content: '■'; }
+
+.op-name {
+  font-family: var(--font-imperial);
+  font-size: clamp(22px, 2.2vw, 28px); letter-spacing: 0.04em;
+  color: var(--mist); margin-bottom: var(--sp-2);
+  transition: color var(--dur-fast);
+}
+.op-card:hover .op-name { color: var(--smoke); }
+
+.op-desc {
+  font-size: clamp(13px, 1.1vw, 15px); font-style: italic;
+  color: var(--dust); line-height: 2.0; margin-bottom: var(--sp-4);
+}
+
+.op-meta {
+  display: flex; gap: var(--sp-4); flex-wrap: wrap;
+}
+.op-meta-item {
+  font-family: var(--font-imperial);
+  font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--ash);
+}
+.op-meta-item span { color: var(--fog); }
+
+.op-number {
+  position: absolute; right: var(--sp-4); bottom: var(--sp-2);
+  font-family: var(--font-imperial);
+  font-size: 100px; font-weight: 700;
+  color: rgba(192, 152, 40, 0.032);
+  line-height: 1; pointer-events: none;
+  letter-spacing: -0.02em;
+  transition: color var(--dur-med);
+}
+.op-card:hover .op-number { color: rgba(192, 152, 40, 0.058); }
+
+
+/* ═══════════════════════════════════════════════
+   MAP — World presence
+═══════════════════════════════════════════════ */
+#mapsec {
+  padding: clamp(88px, 12vh, 152px) 0;
+  border-top: 1px solid rgba(192, 152, 40, 0.07);
+}
+#mapsec .map-header {
+  padding: 0 var(--pad-xl) clamp(48px, 6vh, 80px);
+}
+
+.map-wrap {
+  position: relative;
+  background: var(--carbon);
+  border-top: 1px solid rgba(192, 152, 40, 0.07);
+  border-bottom: 1px solid rgba(192, 152, 40, 0.07);
+  overflow: hidden;
+}
+.map-wrap::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(192, 152, 40, 0.32), transparent);
+  z-index: 1;
+}
+#wmap { width: 100%; height: 480px; display: block; }
+
+.map-tooltip {
+  position: absolute;
+  background: var(--glass-1);
+  border: 1px solid rgba(192, 152, 40, 0.22);
+  border-radius: var(--r-sm);
+  padding: 14px 20px;
+  pointer-events: none; display: none; z-index: 10;
+  backdrop-filter: blur(20px);
+  box-shadow: var(--shadow-md);
+}
+.map-tooltip-code {
+  font-family: var(--font-imperial);
+  font-size: 9px; letter-spacing: 0.38em;
+  color: var(--gold-mid); text-transform: uppercase;
+}
+.map-tooltip-name {
+  font-family: var(--font-imperial);
+  font-size: 18px; letter-spacing: 0.05em;
+  color: var(--mist); margin: 6px 0 4px;
+}
+.map-tooltip-val { font-size: 11px; color: var(--dust); }
+
+.map-legend {
+  display: flex; gap: var(--sp-4); padding: var(--sp-3) var(--pad-xl);
+  border-top: 1px solid rgba(192, 152, 40, 0.06);
+  flex-wrap: wrap;
+}
+.legend-item {
+  display: flex; align-items: center; gap: var(--sp-1);
+  font-family: var(--font-imperial);
+  font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--dust);
+}
+.legend-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+
+
+/* ═══════════════════════════════════════════════
+   NEWS — Intelligence feed
+═══════════════════════════════════════════════ */
+#news { background: var(--graphite); }
+
+.news-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 2px;
+  background: rgba(192, 152, 40, 0.05);
+  border-radius: var(--r); overflow: hidden;
+}
+
+.news-card {
+  background: var(--carbon);
+  padding: var(--sp-6);
+  text-decoration: none; color: inherit;
+  display: flex; flex-direction: column; gap: var(--sp-2);
+  position: relative; overflow: hidden;
+  transition: background var(--dur-med) var(--ease-ios);
+}
+.news-card:hover { background: var(--charcoal); }
+
+.news-accent {
+  position: absolute; left: 0; top: 0; bottom: 0; width: 2px;
+  background: linear-gradient(180deg, transparent 10%, var(--gold-warm) 50%, transparent 90%);
+  transform: scaleY(0); transition: transform var(--dur-med) var(--ease-ios);
+}
+.news-card:hover .news-accent { transform: scaleY(1); }
+
+.news-date {
+  font-family: var(--font-imperial);
+  font-size: 9px; letter-spacing: 0.3em; text-transform: uppercase;
+  color: var(--ash);
+}
+.news-title {
+  font-family: var(--font-imperial);
+  font-size: clamp(16px, 1.5vw, 20px); letter-spacing: 0.04em;
+  color: var(--mist); transition: color var(--dur-fast); line-height: 1.3;
+}
+.news-card:hover .news-title { color: var(--gold-light); }
+
+.news-body {
+  font-size: 13px; font-style: italic;
+  color: var(--dust); line-height: 1.95;
+}
+.news-tag {
+  font-family: var(--font-imperial);
+  font-size: 8px; letter-spacing: 0.3em; text-transform: uppercase;
+  color: var(--ash);
+  border: 1px solid rgba(192, 152, 40, 0.12);
+  border-radius: 20px;
+  padding: 4px 14px;
+  margin-top: auto; align-self: flex-start;
+  transition:
+    border-color var(--dur-fast),
+    color var(--dur-fast),
+    background var(--dur-fast);
+}
+.news-card:hover .news-tag {
+  border-color: rgba(192, 152, 40, 0.32);
+  color: var(--gold-mid);
+  background: rgba(192, 152, 40, 0.06);
+}
+
+
+/* ═══════════════════════════════════════════════
+   OSINT — Intelligence services
+═══════════════════════════════════════════════ */
+#osint { background: var(--obsidian); }
+
+.osint-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: clamp(56px, 9vw, 112px); align-items: start;
+}
+
+.osint-services {
+  display: grid; gap: 2px;
+  background: rgba(192, 152, 40, 0.07);
+  border-radius: var(--r); overflow: hidden;
+}
+.osint-service {
+  background: var(--carbon);
+  padding: var(--sp-4) var(--sp-5);
+  transition: background var(--dur-med) var(--ease-ios);
+  position: relative; overflow: hidden;
+}
+.osint-service::before {
+  content: '';
+  position: absolute; left: 0; top: 0; bottom: 0; width: 1px;
+  background: linear-gradient(180deg, transparent, var(--gold-warm), transparent);
+  transform: scaleY(0); transition: transform var(--dur-med) var(--ease-ios);
+}
+.osint-service:hover { background: var(--charcoal); }
+.osint-service:hover::before { transform: scaleY(1); }
+
+.osint-service-label {
+  font-family: var(--font-imperial);
+  font-size: 9px; letter-spacing: 0.34em; text-transform: uppercase;
+  color: var(--gold-mid); margin-bottom: 10px;
+}
+.osint-service-desc {
+  font-size: 13px; font-style: italic;
+  color: var(--dust); line-height: 1.95;
+}
+
+.osint-notice {
+  margin-top: var(--sp-3);
+  padding: var(--sp-3) var(--sp-4);
+  border: 1px solid rgba(110, 16, 16, 0.24);
+  border-radius: var(--r-sm);
+  background: rgba(110, 16, 16, 0.04);
+  font-size: 13px; font-style: italic;
+  color: var(--dust); line-height: 2;
+}
+.osint-notice strong { color: var(--mist); font-style: normal; }
+
+
+/* ── FORMS — iOS-grade inputs ── */
+.form-group { display: flex; flex-direction: column; gap: 10px; }
+
+.form-label {
+  font-family: var(--font-imperial);
+  font-size: 9px; letter-spacing: 0.34em; text-transform: uppercase;
+  color: var(--ash);
+}
+
+.form-input,
+.form-textarea,
+.form-select {
+  background: rgba(192, 152, 40, 0.03);
+  border: 1px solid rgba(192, 152, 40, 0.10);
+  border-radius: var(--r-sm);
+  color: var(--mist);
+  font-family: var(--font-noble);
+  font-size: 15px; padding: 14px 18px;
+  outline: none; resize: none;
+  transition:
+    border-color var(--dur-fast),
+    background var(--dur-fast),
+    box-shadow var(--dur-fast);
+  width: 100%;
+  backdrop-filter: blur(8px);
+}
+.form-input:focus,
+.form-textarea:focus,
+.form-select:focus {
+  border-color: rgba(192, 152, 40, 0.42);
+  background: rgba(192, 152, 40, 0.055);
+  box-shadow:
+    0 0 0 3px rgba(192, 152, 40, 0.07),
+    0 2px 14px rgba(0, 0, 0, 0.35);
+}
+.form-input::placeholder,
+.form-textarea::placeholder {
+  color: var(--ash); font-style: italic;
+}
+.form-select { appearance: none; cursor: pointer; }
+.form-select option { background: var(--carbon); }
+.form-stack { display: flex; flex-direction: column; gap: var(--sp-3); }
+
+
+/* ═══════════════════════════════════════════════
+   QUOTES — Voices of the Legion
+═══════════════════════════════════════════════ */
+#quotes { background: var(--graphite); }
+
+.quotes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(292px, 1fr));
+  gap: 2px;
+  background: rgba(192, 152, 40, 0.06);
+  border-radius: var(--r); overflow: hidden;
+}
+
+.quote-card {
+  background: var(--carbon);
+  padding: var(--sp-6) var(--sp-5);
+  position: relative; overflow: hidden;
+  transition: background var(--dur-med) var(--ease-ios);
+}
+.quote-card::before {
+  content: '';
+  position: absolute; bottom: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(192, 152, 40, 0.28), transparent);
+  transform: scaleX(0); transition: transform var(--dur-med) var(--ease-ios);
+}
+.quote-card:hover { background: var(--charcoal); }
+.quote-card:hover::before { transform: scaleX(1); }
+
+.quote-mark {
+  font-family: var(--font-noble);
+  font-size: 84px; font-style: italic;
+  color: rgba(192, 152, 40, 0.08);
+  line-height: 0.72;
+  margin-bottom: var(--sp-3); display: block;
+  transition: color var(--dur-med);
+}
+.quote-card:hover .quote-mark { color: rgba(192, 152, 40, 0.16); }
+
+.quote-text {
+  font-size: clamp(14px, 1.1vw, 16px); font-style: italic;
+  color: var(--fog); line-height: 2;
+  margin-bottom: var(--sp-3);
+}
+.quote-author {
+  font-family: var(--font-imperial);
+  font-size: 9px; letter-spacing: 0.34em; text-transform: uppercase;
+  color: var(--gold-mid);
+}
+
+
+/* ═══════════════════════════════════════════════
+   ACHIEVEMENTS — Legion history
+═══════════════════════════════════════════════ */
+#achievements { background: var(--obsidian); }
+
+.ach-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  gap: 2px;
+  background: rgba(192, 152, 40, 0.05);
+  border-radius: var(--r); overflow: hidden;
+}
+.ach-card {
+  background: var(--carbon);
+  padding: var(--sp-5) var(--sp-4);
+  text-align: center;
+  transition: background var(--dur-med) var(--ease-ios);
+  position: relative; overflow: hidden;
+}
+.ach-card:hover { background: var(--charcoal); }
+.ach-card::before {
+  content: '';
+  position: absolute; bottom: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold-deep), transparent);
+  transform: scaleX(0); transition: transform var(--dur-med) var(--ease-ios);
+}
+.ach-card:hover::before { transform: scaleX(1); }
+
+.ach-icon {
+  font-size: 26px; margin-bottom: var(--sp-3); display: block;
+  color: var(--gold-deep);
+  transition: color var(--dur-fast), transform var(--dur-med) var(--ease-spring);
+}
+.ach-card:hover .ach-icon { color: var(--gold-warm); transform: scale(1.12); }
+
+.ach-name {
+  font-family: var(--font-imperial);
+  font-size: clamp(13px, 1.1vw, 15px); letter-spacing: 0.06em;
+  color: var(--mist); margin-bottom: 10px;
+  transition: color var(--dur-fast);
+}
+.ach-card:hover .ach-name { color: var(--smoke); }
+
+.ach-desc {
+  font-size: 12px; font-style: italic;
+  color: var(--dust); line-height: 1.9;
+}
+
+
+/* ═══════════════════════════════════════════════
+   FAQ — Questions & Answers
+═══════════════════════════════════════════════ */
+#faq { background: var(--graphite); }
+#faq .faq-inner { max-width: 840px; }
+
+.faq-item { border-bottom: 1px solid rgba(192, 152, 40, 0.07); }
+
+.faq-question {
+  padding: var(--sp-4) 0;
+  font-family: var(--font-imperial);
+  font-size: clamp(14px, 1.3vw, 18px); letter-spacing: 0.04em;
+  color: var(--mist); cursor: pointer;
+  display: flex; justify-content: space-between; align-items: center;
+  user-select: none; transition: color var(--dur-fast);
+}
+.faq-question:hover { color: var(--gold-light); }
+
+.faq-icon {
+  width: 30px; height: 30px;
+  border: 1px solid rgba(192, 152, 40, 0.22);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--gold-mid); font-size: 16px;
+  transition:
+    transform var(--dur-med) var(--ease-spring),
+    background var(--dur-fast),
+    border-color var(--dur-fast);
+  flex-shrink: 0; margin-left: var(--sp-3);
+  background: transparent;
+}
+.faq-item.open .faq-icon {
+  transform: rotate(45deg);
+  background: rgba(192, 152, 40, 0.09);
+  border-color: rgba(192, 152, 40, 0.42);
+}
+
+.faq-answer {
+  font-size: clamp(13px, 1.1vw, 15px); font-style: italic;
+  color: var(--dust); line-height: 2;
+  max-height: 0; overflow: hidden;
+  transition: max-height 0.48s var(--ease-ios), padding var(--dur-fast);
+}
+.faq-item.open .faq-answer { max-height: 500px; padding-bottom: var(--sp-4); }
+
+
+/* ═══════════════════════════════════════════════
+   CONTACT — Secure channel
+═══════════════════════════════════════════════ */
+#contact { background: var(--obsidian); }
+
+.contact-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: clamp(48px, 8vw, 96px);
+}
+
+/* Glass info card */
+.contact-info-card {
+  background: var(--glass-1);
+  border: 1px solid var(--glass-bd);
+  border-radius: var(--r);
+  backdrop-filter: var(--glass-blur);
+  overflow: hidden;
+  box-shadow:
+    var(--shadow-md),
+    inset 0 1px 0 var(--glass-hi);
+}
+.contact-line {
+  display: flex; gap: var(--sp-3); align-items: flex-start;
+  padding: var(--sp-3) var(--sp-4);
+  border-bottom: 1px solid rgba(192, 152, 40, 0.07);
+  transition: background var(--dur-fast);
+}
+.contact-line:last-child { border-bottom: none; }
+.contact-line:hover { background: rgba(192, 152, 40, 0.03); }
+
+.contact-key {
+  font-family: var(--font-imperial);
+  font-size: 9px; letter-spacing: 0.3em; text-transform: uppercase;
+  color: var(--ash); min-width: 96px; padding-top: 3px; flex-shrink: 0;
+}
+.contact-val {
+  font-size: clamp(13px, 1.1vw, 15px); color: var(--fog);
+}
+.contact-val a {
+  color: var(--gold-mid); text-decoration: none;
+  transition: color var(--dur-fast);
+}
+.contact-val a:hover { color: var(--gold-light); }
+
+/* Form glass card */
+.contact-form-card {
+  background: var(--glass-2);
+  border: 1px solid var(--glass-bd);
+  border-radius: var(--r);
+  padding: var(--sp-6);
+  backdrop-filter: var(--glass-blur);
+  box-shadow:
+    var(--shadow-md),
+    inset 0 1px 0 var(--glass-hi);
+}
+.contact-form-title {
+  font-family: var(--font-imperial);
+  font-size: 9px; letter-spacing: 0.42em; text-transform: uppercase;
+  color: var(--ash); margin-bottom: var(--sp-4);
+}
+
+
+/* ═══════════════════════════════════════════════
+   FOOTER — Eternal
+═══════════════════════════════════════════════ */
+footer {
+  padding: clamp(32px, 5vh, 56px) var(--pad-xl);
+  border-top: 1px solid rgba(192, 152, 40, 0.09);
+  display: flex; justify-content: space-between; align-items: center;
+  background: var(--void);
+  flex-wrap: wrap; gap: var(--sp-2);
+}
+.footer-logo {
+  font-family: var(--font-deco);
+  font-size: 16px; letter-spacing: 0.52em;
+  color: var(--gold-warm);
+  text-shadow: 0 0 36px rgba(192, 152, 40, 0.28);
+}
+.footer-motto {
+  font-family: var(--font-noble);
+  font-size: 12px; font-style: italic;
+  color: var(--ash); text-align: center;
+  line-height: 1.85;
+}
+.footer-copy {
+  font-family: var(--font-imperial);
+  font-size: 9px; letter-spacing: 0.24em;
+  color: var(--iron);
+}
+
+
+/* ═══════════════════════════════════════════════
+   REVEAL ANIMATIONS — Scroll-triggered
+═══════════════════════════════════════════════ */
+.reveal {
+  opacity: 0;
+  transform: translateY(32px);
+  transition:
+    opacity var(--dur-slow) var(--ease-out),
+    transform var(--dur-slow) var(--ease-out);
+}
+.reveal.on {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+
+/* ═══════════════════════════════════════════════
+   RESPONSIVE — Mobile-first
+═══════════════════════════════════════════════ */
+@media (max-width: 1024px) {
+  nav { padding: 22px var(--pad-md); }
+  nav.scrolled { padding: 16px var(--pad-md); }
+  .nav-links { display: none; }
+  .nav-cta { display: none; }
+  .burger { display: flex; }
+
+  #hero { padding: clamp(96px, 14vh, 150px) var(--pad-md) clamp(72px, 9vh, 96px); }
+  .hero-stat { display: none; }
+
+  section { padding: clamp(64px, 9vh, 112px) var(--pad-md); }
+  #mapsec { padding: clamp(64px, 9vh, 112px) 0; }
+  #mapsec .map-header { padding: 0 var(--pad-md) clamp(40px, 5vh, 64px); }
+
+  .about-grid { grid-template-columns: 1fr; gap: 56px; }
+  .osint-grid { grid-template-columns: 1fr; gap: 56px; }
+  .contact-grid { grid-template-columns: 1fr; gap: 48px; }
+  .ops-grid { grid-template-columns: 1fr; }
+  .news-grid { grid-template-columns: 1fr; }
+  .op-card.featured { grid-column: span 1; }
+}
+
+@media (max-width: 640px) {
+  nav { padding: 18px 20px; }
+  nav.scrolled { padding: 14px 20px; }
+
+  #hero { padding: 96px 20px 64px; }
+  .hero-title { font-size: clamp(68px, 22vw, 120px); }
+  .hero-position { display: none; } /* Keep mobile clean */
+
+  section { padding: 72px 20px; }
+  #mapsec .map-header { padding: 0 20px 36px; }
+  .map-legend { padding: 16px 20px; }
+
+  footer {
+    padding: 32px 20px;
+    flex-direction: column;
+    text-align: center;
+    gap: 14px;
+  }
+
+  .team-grid { grid-template-columns: 1fr; }
+  .quotes-grid { grid-template-columns: 1fr; }
+  .ach-grid { grid-template-columns: 1fr 1fr; }
+  .stats-grid { grid-template-columns: 1fr 1fr; }
+  .contact-form-card { padding: 28px 20px; }
+  .hero-actions { gap: 14px; }
+  .btn-primary, .btn-ghost { padding: 14px 28px; font-size: 9px; }
+  .manifesto-item { grid-template-columns: 48px 1fr; gap: var(--sp-3); }
+}
+
+@media (max-width: 380px) {
+  .ach-grid { grid-template-columns: 1fr; }
+  .stats-grid { grid-template-columns: 1fr; }
+}
+
+/* ═══════════════════════════════════════════════
+   ACTIVE NAV LINK — scroll-tracked
+═══════════════════════════════════════════════ */
+.nav-links a.nav-active {
+  color: var(--gold-light);
+}
+.nav-links a.nav-active::after {
+  transform: scaleX(1);
+}
+
+/* ═══════════════════════════════════════════════
+   TYPING CURSOR — hero subtitle
+═══════════════════════════════════════════════ */
+.typing-cursor {
+  display: inline-block;
+  width: 2px; height: 1em;
+  background: var(--gold-mid);
+  margin-left: 3px;
+  vertical-align: text-bottom;
+  animation: blinkCursor 1.1s step-end infinite;
+}
+@keyframes blinkCursor {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
+
+/* ═══════════════════════════════════════════════
+   CTA SECTION — Final call before footer
+═══════════════════════════════════════════════ */
+#cta-section {
+  background: var(--void);
+  padding: clamp(100px, 16vh, 180px) var(--pad-xl);
+  border-top: 1px solid rgba(192, 152, 40, 0.07);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+#cta-section::before {
+  content: '';
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 70% 60% at 50% 50%, rgba(192, 152, 40, 0.04) 0%, transparent 70%);
+  pointer-events: none;
+}
+#cta-section::after {
+  content: 'LEGION';
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: var(--font-deco);
+  font-size: clamp(120px, 22vw, 280px);
+  font-weight: 700;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(192, 152, 40, 0.04);
+  letter-spacing: 0.1em;
+  pointer-events: none;
+  white-space: nowrap;
+  z-index: 0;
+}
+.cta-eyebrow {
+  font-family: var(--font-imperial);
+  font-size: 9px; letter-spacing: 0.58em;
+  color: var(--gold-mid); text-transform: uppercase;
+  margin-bottom: var(--sp-5);
+  display: flex; align-items: center; justify-content: center; gap: var(--sp-3);
+  position: relative; z-index: 1;
+}
+.cta-eyebrow::before, .cta-eyebrow::after {
+  content: '';
+  width: 56px; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold-mid));
+}
+.cta-eyebrow::after { transform: scaleX(-1); }
+.cta-title {
+  font-family: var(--font-imperial);
+  font-size: clamp(34px, 5vw, 62px);
+  font-weight: 700; letter-spacing: 0.04em;
+  color: var(--smoke); line-height: 1.1;
+  margin-bottom: var(--sp-4);
+  position: relative; z-index: 1;
+}
+.cta-title em { color: var(--gold-warm); font-style: normal; }
+.cta-sub {
+  font-size: clamp(15px, 1.3vw, 18px);
+  font-style: italic; color: var(--fog);
+  max-width: 520px; margin: 0 auto var(--sp-8);
+  line-height: 2; position: relative; z-index: 1;
+}
+.cta-actions {
+  display: flex; gap: var(--sp-3); justify-content: center; align-items: center;
+  flex-wrap: wrap; position: relative; z-index: 1;
+}
+
+/* ═══════════════════════════════════════════════
+   STAGGER — card entrance delays
+═══════════════════════════════════════════════ */
+.stagger-child { transition-delay: calc(var(--i, 0) * 75ms); }
+</style>
+</head>
+
+<body>
+
+<!-- ── SCROLL PROGRESS ── -->
+<div id="scrollBar"></div>
+
+<!-- ── CUSTOM CURSOR ── -->
+<div class="cursor-dot" id="curDot"></div>
+<div class="cursor-ring" id="curRing"></div>
+
+
+<!-- ═══════════ NAVIGATION ═══════════ -->
+<nav id="nav">
+  <a href="#hero" class="nav-logo">LEGION</a>
+  <ul class="nav-links">
+    <li><a href="#about">О нас</a></li>
+    <li><a href="#manifesto">Манифест</a></li>
+    <li><a href="#team">Состав</a></li>
+    <li><a href="#ops">Операции</a></li>
+    <li><a href="#mapsec">Карта</a></li>
+    <li><a href="#osint">OSINT</a></li>
+    <li><a href="#contact">Контакт</a></li>
+  </ul>
+  <a href="https://t.me/LegionAnket_bot" target="_blank" class="nav-cta">Вступить</a>
+  <div class="burger" id="burger" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- ── MOBILE MENU ── -->
+<div class="mob-menu" id="mobMenu">
+  <a href="#about" onclick="closeMenu()">О нас</a>
+  <div class="mob-divider"></div>
+  <a href="#manifesto" onclick="closeMenu()">Манифест</a>
+  <a href="#team" onclick="closeMenu()">Состав</a>
+  <a href="#ops" onclick="closeMenu()">Операции</a>
+  <a href="#mapsec" onclick="closeMenu()">Карта</a>
+  <a href="#osint" onclick="closeMenu()">OSINT</a>
+  <a href="#contact" onclick="closeMenu()">Контакт</a>
+  <a href="https://t.me/LegionAnket_bot" target="_blank" class="mob-cta" onclick="closeMenu()">Вступить</a>
+</div>
+
+
+<!-- ═══════════ HERO ═══════════ -->
+<section id="hero">
+  <!-- Background: Colosseum with cinematic depth layering -->
+  <div class="hero-bg">
+    <div class="hero-bg-img" id="heroBgImg"></div>
+    <div class="hero-bg-overlay"></div>
+    <div class="hero-bg-layer1"></div>
+    <div class="hero-grid"></div>
+    <div class="hero-vlines"></div>
+  </div>
+
+  <!-- Main hero content -->
+  <div class="hero-content">
+    <!-- Eyebrow label -->
+    <div class="hero-eyebrow">
+      <div class="hero-eyebrow-line"></div>
+      <span class="hero-eyebrow-text">Анонимная Организация</span>
+    </div>
+
+    <!-- Giant title -->
+    <h1 class="hero-title">LEGION</h1>
+
+    <!-- Latin subtitle -->
+    <p class="hero-subtitle">Sumus Anonymi · Sumus Legio</p>
+
+    <!-- One-line positioning — NEW: clarity -->
+    <div class="hero-position">
+      <span class="hero-position-text">Децентрализованная сеть · OSINT · Информационная свобода</span>
+    </div>
+
+    <!-- Gold divider -->
+    <div class="hero-divider"></div>
+
+    <!-- Core description -->
+    <p class="hero-desc">
+      Мы существуем не как личности — мы существуем как <em>идея</em>.<br>
+      Нас нельзя уничтожить, потому что нас нельзя найти.
+    </p>
+
+    <!-- CTAs -->
+    <div class="hero-actions">
+      <a href="https://t.me/LegionAnket_bot" target="_blank" class="btn-primary">
+        <span>Вступить в Legion</span>
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+          <path d="M3 7h8M7 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
+      <a href="#about" class="btn-ghost">Узнать больше</a>
+    </div>
+  </div>
+
+  <!-- Live member count — desktop only -->
+  <div class="hero-stat">
+    <div class="hero-stat-number" id="liveNum">247</div>
+    <div class="hero-stat-label">
+      <div class="pulse-dot"></div>
+      участников онлайн
+    </div>
+  </div>
+
+  <!-- Scroll hint -->
+  <div class="scroll-hint">
+    <div class="scroll-arrow"></div>
+    <span>Прокрутить</span>
+  </div>
+</section>
+
+
+<!-- ═══════════ ABOUT ═══════════ -->
+<section id="about">
+  <div class="section-label reveal">01 — О нас</div>
+  <div class="section-title reveal">МЫ — <em>ИДЕЯ.</em><br>ИДЕИ НЕ УМИРАЮТ.</div>
+  <div class="about-grid reveal">
+    <div class="about-text">
+      <p>Legion — это не группа людей. Это принцип. Мы собираемся вокруг общих ценностей: свободы информации, прозрачности и права на анонимность.</p>
+      <p>У нас нет штаб-квартиры. У нас нет официального лидера. У нас нет лица. Каждый участник — автономная единица, действующая в рамках общего кодекса.</p>
+      <p>Мы не враги и не союзники по умолчанию. Мы — зеркало системы.</p>
+    </div>
+    <div class="stats-grid">
+      <div class="stat-card live">
+        <div class="stat-number">
+          <span id="sCnt">247</span>
+          <div class="pulse-dot" style="margin-left:8px;margin-bottom:8px"></div>
+        </div>
+        <div class="stat-label">Участников</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number"><span id="sOps">0</span><sup>+</sup></div>
+        <div class="stat-label">Операций</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number"><span id="sYrs">0</span></div>
+        <div class="stat-label">Лет активности</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">∞</div>
+        <div class="stat-label">Идей</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════ MANIFESTO ═══════════ -->
+<section id="manifesto">
+  <div class="section-label reveal">02 — Кодекс</div>
+  <div class="section-title reveal">МАНИФЕСТ<br><em>ЛЕГИОНА</em></div>
+  <div class="manifesto-inner reveal">
+    <div class="manifesto-item">
+      <div class="manifesto-num">01</div>
+      <div>
+        <div class="manifesto-title">Анонимность — основа</div>
+        <div class="manifesto-body">Личность участника неприкосновенна. Мы никогда не раскрываем информацию об участниках. Позывной — единственная идентичность внутри организации.</div>
+      </div>
+    </div>
+    <div class="manifesto-item">
+      <div class="manifesto-num">02</div>
+      <div>
+        <div class="manifesto-title">Нет иерархии — есть роли</div>
+        <div class="manifesto-body">Legion не имеет вертикали власти. Есть роли и зоны ответственности. Каждый участник действует автономно в рамках общего кодекса.</div>
+      </div>
+    </div>
+    <div class="manifesto-item">
+      <div class="manifesto-num">03</div>
+      <div>
+        <div class="manifesto-title">Информация должна быть свободной</div>
+        <div class="manifesto-body">Знание — не привилегия. Мы против цензуры, против монополии на правду и против систем, скрывающих информацию от людей.</div>
+      </div>
+    </div>
+    <div class="manifesto-item">
+      <div class="manifesto-num">04</div>
+      <div>
+        <div class="manifesto-title">Действия — не слова</div>
+        <div class="manifesto-body">Легион не занимается пустыми декларациями. Каждое решение сопровождается действием. Мы не говорим — мы делаем.</div>
+      </div>
+    </div>
+    <div class="manifesto-item">
+      <div class="manifesto-num">05</div>
+      <div>
+        <div class="manifesto-title">Не прощаем. Не забываем.</div>
+        <div class="manifesto-body">Предательство организации или её участников влечёт последствия. Legion помнит всё. Legion ждёт столько, сколько нужно.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════ TEAM ═══════════ -->
+<section id="team">
+  <div class="section-label reveal">03 — Состав</div>
+  <div class="section-title reveal">БЕЗ ИМЁН.<br><em>ТОЛЬКО РОЛИ.</em></div>
+  <div class="team-grid reveal">
+
+    <!-- Founder — gold border treatment -->
+    <div class="member-card stagger-child" style="border:1px solid rgba(192,152,40,0.15);--i:0">
+      <div class="member-accent"></div>
+      <div class="member-top-accent"></div>
+      <span class="member-id">#001</span>
+      <div class="member-icon">★</div>
+      <div class="member-badge">Основатель</div>
+      <div class="member-name">M1LANCOLY</div>
+      <div class="member-role">Архитектор Легиона</div>
+      <div class="member-bio">Создал концепцию, структуру и кодекс организации.<br>Видение: построить то, что нельзя сломать.</div>
+    </div>
+
+    <div class="member-card stagger-child" style="--i:1">
+      <div class="member-accent"></div>
+      <div class="member-top-accent"></div>
+      <span class="member-id">#007</span>
+      <div class="member-icon">◈</div>
+      <div class="member-name">PHANTOM</div>
+      <div class="member-role">Оперативник</div>
+      <div class="member-bio">Исполнитель на местах. Специализируется на тихих операциях.<br>Местонахождение: <span class="redacted">█████████</span></div>
+    </div>
+
+    <div class="member-card stagger-child" style="--i:2">
+      <div class="member-accent"></div>
+      <div class="member-top-accent"></div>
+      <span class="member-id">#013</span>
+      <div class="member-icon">◎</div>
+      <div class="member-name">SIGNAL</div>
+      <div class="member-role">Связной</div>
+      <div class="member-bio">Контролирует каналы коммуникации. Безопасность передачи данных.<br>Контакт: <span class="redacted">███████████</span></div>
+    </div>
+
+    <!-- Redacted member -->
+    <div class="member-card stagger-child" style="--i:3">
+      <div class="member-accent"></div>
+      <div class="member-top-accent"></div>
+      <span class="member-id">#???</span>
+      <div class="member-icon">?</div>
+      <div class="member-name"><span class="redacted">████████</span></div>
+      <div class="member-role">Засекречено</div>
+      <div class="member-bio">Информация недоступна.<br>Допуск: <span class="redacted">████ ████████</span></div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ═══════════ OPERATIONS ═══════════ -->
+<section id="ops">
+  <div class="section-label reveal">04 — Архив</div>
+  <div class="section-title reveal">ОПЕРАЦИИ<br><em>ЛЕГИОНА</em></div>
+  <div class="ops-grid reveal">
+
+    <!-- Featured: spanning both columns -->
+    <div class="op-card featured">
+      <div class="op-top-line"></div>
+      <div class="op-status active">Активная</div>
+      <div class="op-name">Операция «ТИШИНА»</div>
+      <div class="op-desc">Долгосрочная операция по мониторингу и документированию. Детали засекречены до завершения. Задействовано <span class="redacted">██</span> ячеек в <span class="redacted">█</span> странах.</div>
+      <div class="op-meta">
+        <div class="op-meta-item">Статус: <span style="color:var(--gold-warm)">В процессе</span></div>
+        <div class="op-meta-item">Начало: <span><span class="redacted">██.██</span>.2025</span></div>
+        <div class="op-meta-item">Приоритет: <span style="color:var(--gold-warm)">ВЫСОКИЙ</span></div>
+      </div>
+      <div class="op-number">01</div>
+    </div>
+
+    <div class="op-card">
+      <div class="op-top-line"></div>
+      <div class="op-status done">Завершена</div>
+      <div class="op-name">Операция «ПРИЗРАК»</div>
+      <div class="op-desc">Успешно завершена. Цель достигнута без потерь. Полный отчёт в закрытом канале.</div>
+      <div class="op-meta">
+        <div class="op-meta-item">Дата: <span>03.2026</span></div>
+        <div class="op-meta-item">Итог: <span style="color:var(--gold-mid)">Успех</span></div>
+      </div>
+      <div class="op-number">02</div>
+    </div>
+
+    <div class="op-card">
+      <div class="op-top-line"></div>
+      <div class="op-status classified">Засекречено</div>
+      <div class="op-name">Операция «<span class="redacted">███████</span>»</div>
+      <div class="op-desc">Вся информация засекречена. Доступ уровня <span class="redacted">████</span> и выше.</div>
+      <div class="op-meta">
+        <div class="op-meta-item">Статус: <span style="color:var(--crimson)">Classified</span></div>
+        <div class="op-meta-item">Дата: <span class="redacted">██.██.████</span></div>
+      </div>
+      <div class="op-number">03</div>
+    </div>
+
+    <div class="op-card">
+      <div class="op-top-line"></div>
+      <div class="op-status done">Завершена</div>
+      <div class="op-name">Операция «СИГНАЛ»</div>
+      <div class="op-desc">Установлены защищённые каналы связи между ячейками. Протокол внедрён.</div>
+      <div class="op-meta">
+        <div class="op-meta-item">Дата: <span>01.2026</span></div>
+        <div class="op-meta-item">Итог: <span style="color:var(--gold-mid)">Успех</span></div>
+      </div>
+      <div class="op-number">04</div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ═══════════ MAP ═══════════ -->
+<section id="mapsec">
+  <div class="map-header">
+    <div class="section-label reveal">05 — Ячейки</div>
+    <div class="section-title reveal" style="margin-bottom:0">КАРТА<br><em>ЛЕГИОНА</em></div>
+  </div>
+  <div class="map-wrap">
+    <canvas id="wmap"></canvas>
+    <div class="map-tooltip" id="mtt">
+      <div class="map-tooltip-code" id="ttc"></div>
+      <div class="map-tooltip-name" id="ttn"></div>
+      <div class="map-tooltip-val" id="ttv"></div>
+    </div>
+  </div>
+  <div class="map-legend">
+    <div class="legend-item">
+      <div class="legend-dot" style="background:var(--gold-warm)"></div>
+      Активная ячейка
+    </div>
+    <div class="legend-item">
+      <div class="legend-dot" style="background:var(--ash)"></div>
+      Наблюдатели
+    </div>
+    <div class="legend-item">
+      <div class="legend-dot" style="background:var(--crimson)"></div>
+      Засекречено
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════ NEWS ═══════════ -->
+<section id="news">
+  <div class="section-label reveal">06 — Новости</div>
+  <div class="section-title reveal">ПОСЛЕДНИЕ<br><em>СОБЫТИЯ</em></div>
+  <div class="news-grid reveal">
+
+    <a href="#" class="news-card">
+      <div class="news-accent"></div>
+      <span class="news-date">21.03.2026 — 04:17 UTC</span>
+      <div class="news-title">Операция «Призрак» завершена успешно</div>
+      <div class="news-body">Цель достигнута. Детали засекречены на 90 дней. Участники выведены без потерь.</div>
+      <span class="news-tag">Оперативное</span>
+    </a>
+
+    <a href="#" class="news-card">
+      <div class="news-accent"></div>
+      <span class="news-date">15.03.2026 — 22:03 UTC</span>
+      <div class="news-title">Новый протокол безопасной связи</div>
+      <div class="news-body">SIGNAL разработал обновлённый протокол шифрования. Переход обязателен до 01.04.2026.</div>
+      <span class="news-tag">Протокол</span>
+    </a>
+
+    <a href="#" class="news-card">
+      <div class="news-accent"></div>
+      <span class="news-date">08.03.2026 — 17:44 UTC</span>
+      <div class="news-title">Открыт набор в ячейку Восток</div>
+      <div class="news-body">Формируется новая ячейка. Требуются: аналитик, оперативник, технический специалист.</div>
+      <span class="news-tag">Набор</span>
+    </a>
+
+    <a href="#" class="news-card">
+      <div class="news-accent"></div>
+      <span class="news-date">01.03.2026 — 09:00 UTC</span>
+      <div class="news-title">Legion преодолел отметку 200 участников</div>
+      <div class="news-body">Организация выросла до 247 активных участников в 9 регионах. Рост продолжается.</div>
+      <span class="news-tag">Рост</span>
+    </a>
+
+  </div>
+</section>
+
+
+<!-- ═══════════ OSINT ═══════════ -->
+<section id="osint">
+  <div class="section-label reveal">07 — Разведка</div>
+  <div class="section-title reveal">OSINT<br><em>УСЛУГИ</em></div>
+  <div class="osint-grid reveal">
+
+    <!-- Services column -->
+    <div>
+      <p style="color:var(--fog);font-size:clamp(15px,1.3vw,18px);font-style:italic;line-height:2.05;margin-bottom:var(--sp-4)">Legion предоставляет услуги разведки на основе открытых источников. Только легальные методы — публичные базы, соцсети, открытые реестры. Анонимность клиента гарантируется.</p>
+      <div class="osint-services">
+        <div class="osint-service">
+          <div class="osint-service-label">01 — Поиск по никнейму</div>
+          <div class="osint-service-desc">Поиск аккаунтов по никнейму на сотнях платформ. Соцсети, форумы, репозитории.</div>
+        </div>
+        <div class="osint-service">
+          <div class="osint-service-label">02 — Анализ цифрового следа</div>
+          <div class="osint-service-desc">Сбор публичной информации: активность, связи, упоминания в открытых источниках.</div>
+        </div>
+        <div class="osint-service">
+          <div class="osint-service-label">03 — Верификация данных</div>
+          <div class="osint-service-desc">Проверка достоверности информации через перекрёстный анализ открытых источников.</div>
+        </div>
+        <div class="osint-service">
+          <div class="osint-service-label">04 — Мониторинг организаций</div>
+          <div class="osint-service-desc">Публичные реестры, юридические документы, открытые корпоративные данные.</div>
+        </div>
+      </div>
+      <div class="osint-notice">
+        ⚠ Мы работаем <strong>только с открытыми источниками</strong>.<br>
+        Никаких слитых баз и нарушений приватности.<br>
+        Заявки, нарушающие закон — отклоняются без объяснений.
+      </div>
+    </div>
+
+    <!-- Request form column -->
+    <div>
+      <div style="font-family:var(--font-imperial);font-size:9px;letter-spacing:0.38em;text-transform:uppercase;color:var(--ash);margin-bottom:var(--sp-4)">— Форма запроса</div>
+      <div class="form-stack">
+        <div class="form-group">
+          <label class="form-label">Ваш позывной</label>
+          <input class="form-input" id="oNick" type="text" placeholder="ANONYMOUS">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Тип запроса</label>
+          <select class="form-select" id="oType">
+            <option value="" disabled selected>Выбери тип...</option>
+            <option>Поиск по никнейму</option>
+            <option>Анализ цифрового следа</option>
+            <option>Верификация данных</option>
+            <option>Мониторинг организаций</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Описание цели</label>
+          <textarea class="form-textarea" id="oDesc" rows="4" placeholder="Опишите задачу..."></textarea>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Цель запроса</label>
+          <input class="form-input" id="oGoal" type="text" placeholder="Безопасность / Верификация / ...">
+        </div>
+        <button class="btn-primary" id="osintBtn" onclick="sendOsint()" style="width:100%;justify-content:center">
+          <span>Отправить запрос</span>
+        </button>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ═══════════ QUOTES ═══════════ -->
+<section id="quotes">
+  <div class="section-label reveal">08 — Голоса</div>
+  <div class="section-title reveal">ЦИТАТЫ<br><em>УЧАСТНИКОВ</em></div>
+  <div class="quotes-grid reveal">
+
+    <div class="quote-card">
+      <span class="quote-mark">"</span>
+      <div class="quote-text">Legion дал мне понять, что анонимность — это не слабость. Это инструмент.</div>
+      <div class="quote-author">— PHANTOM, оперативник</div>
+    </div>
+
+    <div class="quote-card">
+      <span class="quote-mark">"</span>
+      <div class="quote-text">Я пришёл за идеей. Остался ради людей, которые эту идею воплощают.</div>
+      <div class="quote-author">— SIGNAL, связной</div>
+    </div>
+
+    <div class="quote-card">
+      <span class="quote-mark">"</span>
+      <div class="quote-text">Здесь не спрашивают кто ты. Здесь спрашивают — что ты можешь сделать.</div>
+      <div class="quote-author">— <span class="redacted">███████</span>, участник</div>
+    </div>
+
+    <div class="quote-card">
+      <span class="quote-mark">"</span>
+      <div class="quote-text">Мы не существуем. Но всё что происходит — происходит благодаря нам.</div>
+      <div class="quote-author">— M1LANCOLY, основатель</div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ═══════════ ACHIEVEMENTS ═══════════ -->
+<section id="achievements">
+  <div class="section-label reveal">09 — История</div>
+  <div class="section-title reveal">ДОСТИЖЕНИЯ<br><em>ЛЕГИОНА</em></div>
+  <div class="ach-grid reveal">
+
+    <div class="ach-card">
+      <span class="ach-icon">⬡</span>
+      <div class="ach-name">Основан</div>
+      <div class="ach-desc">Legion создан как концепция анонимной децентрализованной организации</div>
+    </div>
+
+    <div class="ach-card">
+      <span class="ach-icon">◎</span>
+      <div class="ach-name">200+ участников</div>
+      <div class="ach-desc">Перейдена отметка двухсот активных участников в разных странах</div>
+    </div>
+
+    <div class="ach-card">
+      <span class="ach-icon">★</span>
+      <div class="ach-name">9 ячеек</div>
+      <div class="ach-desc">Сформированы автономные ячейки в 9 регионах мира</div>
+    </div>
+
+    <div class="ach-card">
+      <span class="ach-icon">◈</span>
+      <div class="ach-name">89 операций</div>
+      <div class="ach-desc">Завершено 89 операций с нулевым процентом провалов</div>
+    </div>
+
+    <div class="ach-card">
+      <span class="ach-icon">▶</span>
+      <div class="ach-name">Протокол v3</div>
+      <div class="ach-desc">Внедрён новый протокол безопасной связи между ячейками</div>
+    </div>
+
+    <div class="ach-card">
+      <span class="ach-icon">∞</span>
+      <div class="ach-name">Идея живёт</div>
+      <div class="ach-desc">Legion продолжает расти. Следующее достижение — твоё</div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ═══════════ FAQ ═══════════ -->
+<section id="faq">
+  <div class="section-label reveal">10 — Вопросы</div>
+  <div class="section-title reveal">ЧАСТО<br><em>СПРАШИВАЮТ</em></div>
+  <div class="faq-inner reveal">
+
+    <div class="faq-item">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        Кто может вступить в Legion?
+        <span class="faq-icon">+</span>
+      </div>
+      <div class="faq-answer">Любой человек вне зависимости от возраста, страны и профессии. Мы смотрим не на биографию, а на мотивацию и готовность действовать. Единственное требование — разделять ценности организации.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        Это законно?
+        <span class="faq-icon">+</span>
+      </div>
+      <div class="faq-answer">Legion действует в рамках закона. Анонимность — это право, а не преступление. Мы не занимаемся незаконной деятельностью и не призываем к насилию. Наши инструменты — информация, осведомлённость и организация.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        Нужно ли платить за членство?
+        <span class="faq-icon">+</span>
+      </div>
+      <div class="faq-answer">Нет. Legion никогда не берёт деньги за вступление или участие. Если кто-то просит у тебя деньги от имени Legion — это мошенник.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        Как сохранить анонимность?
+        <span class="faq-icon">+</span>
+      </div>
+      <div class="faq-answer">Используй позывной вместо настоящего имени. Общайся через зашифрованные каналы. Не раскрывай личную информацию. Мы рекомендуем Tor Browser и ProtonMail для максимальной защиты.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        Что такое OSINT услуги Legion?
+        <span class="faq-icon">+</span>
+      </div>
+      <div class="faq-answer">Мы предоставляем разведку на основе открытых источников — поиск по никнейму, анализ цифрового следа, верификацию данных. Только легальные методы, только публичная информация.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        Как связаться анонимно?
+        <span class="faq-icon">+</span>
+      </div>
+      <div class="faq-answer">Пиши через @LegionAnket_bot в Telegram — не нужно указывать настоящее имя. Или отправь зашифрованное сообщение на <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="632f06040a0c0d200c0d170200172313110c170c0d4d0e06">[email&#160;protected]</a>, используя наш PGP ключ.</div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ═══════════ CONTACT ═══════════ -->
+<section id="contact">
+  <div class="section-label reveal">11 — Связь</div>
+  <div class="section-title reveal">КОНТАКТ<br><em>С ЛЕГИОНОМ</em></div>
+  <div class="contact-grid reveal">
+
+    <!-- Info card — glass -->
+    <div class="contact-info-card">
+      <div class="contact-line">
+        <span class="contact-key">Telegram</span>
+        <span class="contact-val"><a href="https://t.me/LegionAnket_bot" target="_blank">@LegionAnket_bot</a></span>
+      </div>
+      <div class="contact-line">
+        <span class="contact-key">Email</span>
+        <span class="contact-val"><a href="/cdn-cgi/l/email-protection#0f436a686660614c60617b6e6c7b4f7f7d607b606121626a"><span class="__cf_email__" data-cfemail="f3bf96949a9c9db09c9d87929087b383819c879c9ddd9e96">[email&#160;protected]</span></a></span>
+      </div>
+      <div class="contact-line">
+        <span class="contact-key">PGP ключ</span>
+        <span class="contact-val" style="font-size:12px;color:var(--dust);font-family:monospace;line-height:1.9">3A4F 9C21 BB70 E841 4D2F<br>7A91 F3C8 D502 1E6A 8B39</span>
+      </div>
+      <div class="contact-line">
+        <span class="contact-key">Протокол</span>
+        <span class="contact-val" style="color:var(--dust);font-style:italic">Только зашифрованные сообщения. Личные данные не требуются.</span>
+      </div>
+    </div>
+
+    <!-- Message form — glass -->
+    <div class="contact-form-card">
+      <div class="contact-form-title">— Написать нам</div>
+      <div class="form-stack">
+        <div class="form-group">
+          <label class="form-label">Позывной</label>
+          <input class="form-input" type="text" placeholder="ANONYMOUS">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Сообщение</label>
+          <textarea class="form-textarea" rows="6" placeholder="Введите сообщение..."></textarea>
+        </div>
+        <button class="btn-primary" id="sendBtn" onclick="sendMsg()" style="width:100%;justify-content:center">
+          <span>Отправить</span>
+        </button>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ═══════════ CTA — Final call ═══════════ -->
+<section id="cta-section">
+  <div class="cta-eyebrow reveal">Присоединиться</div>
+  <div class="cta-title reveal">ГОТОВ СТАТЬ<br><em>ЧАСТЬЮ ЛЕГИОНА?</em></div>
+  <p class="cta-sub reveal">Нет анкет. Нет лишних вопросов.<br>Только идея, кодекс и готовность действовать.</p>
+  <div class="cta-actions reveal">
+    <a href="https://t.me/LegionAnket_bot" target="_blank" class="btn-primary">
+      <span>Вступить в Legion</span>
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+        <path d="M3 7h8M7 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </a>
+    <a href="#about" class="btn-ghost">Узнать больше</a>
+  </div>
+</section>
+
+
+<!-- ═══════════ FOOTER ═══════════ -->
+<footer>
+  <span class="footer-logo">LEGION</span>
+  <div class="footer-motto">
+    We are anonymous. We are legion.<br>
+    <em style="color:var(--gold-deep)">We do not forgive. We do not forget.</em>
+  </div>
+  <span class="footer-copy">© 2026 LEGION</span>
+</footer>
+
+
+<!-- ═══════════════════════════════════════════════
+     JAVASCRIPT — All interactions
+═══════════════════════════════════════════════ -->
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+'use strict';
+
+/* ── CUSTOM CURSOR ──────────────────────── */
+const dot  = document.getElementById('curDot');
+const ring = document.getElementById('curRing');
+let mx = 0, my = 0, rx = 0, ry = 0;
+
+document.addEventListener('mousemove', e => {
+  mx = e.clientX; my = e.clientY;
+  dot.style.left = mx + 'px';
+  dot.style.top  = my + 'px';
+});
+
+/* Smooth lag for ring — iOS spring feel */
+(function animCursor() {
+  rx += (mx - rx) * 0.1;
+  ry += (my - ry) * 0.1;
+  ring.style.left = rx + 'px';
+  ring.style.top  = ry + 'px';
+  requestAnimationFrame(animCursor);
+})();
+
+/* Hover expand for interactive elements */
+document.querySelectorAll(
+  'a, button, .faq-question, .osint-service, .member-card, .op-card, .news-card, .quote-card, .ach-card'
+).forEach(el => {
+  el.addEventListener('mouseenter', () => ring.classList.add('hover'));
+  el.addEventListener('mouseleave', () => ring.classList.remove('hover'));
+});
+
+
+/* ── SCROLL PROGRESS + NAV ──────────────── */
+window.addEventListener('scroll', () => {
+  const pct = window.scrollY / (document.body.scrollHeight - window.innerHeight) * 100;
+  document.getElementById('scrollBar').style.width = pct + '%';
+  document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 60);
+}, { passive: true });
+
+
+/* ── PARALLAX HERO ──────────────────────── */
+const heroImg = document.getElementById('heroBgImg');
+window.addEventListener('scroll', () => {
+  if (heroImg && window.scrollY < window.innerHeight * 1.5) {
+    const offset = window.scrollY * 0.22;
+    heroImg.style.transform = `scale(1.08) translateY(${offset}px)`;
+  }
+}, { passive: true });
+
+
+/* ── LIVE MEMBER COUNTER ────────────────── */
+let base = 247;
+const lEl = document.getElementById('liveNum');
+const cEl = document.getElementById('sCnt');
+
+function flicker() {
+  if (Math.random() < 0.32) {
+    base = Math.max(218, Math.min(280, base + (Math.random() < 0.55 ? 1 : -1)));
+    if (lEl) lEl.textContent = base;
+    if (cEl) cEl.textContent = base;
+  }
+  setTimeout(flicker, 1400 + Math.random() * 2600);
+}
+flicker();
+
+
+/* ── STAT COUNT-UP ANIMATION ────────────── */
+function countUp(el, target, duration = 1500) {
+  if (!el) return;
+  let start = 0;
+  const step = target / (duration / 16);
+  const tm = setInterval(() => {
+    start = Math.min(start + step, target);
+    el.textContent = Math.floor(start);
+    if (start >= target) clearInterval(tm);
+  }, 16);
+}
+
+const statsObs = new IntersectionObserver(entries => {
+  if (entries[0].isIntersecting) {
+    countUp(document.getElementById('sOps'), 89, 1500);
+    countUp(document.getElementById('sYrs'), 5, 1000);
+    statsObs.disconnect();
+  }
+}, { threshold: 0.3 });
+
+const opsEl = document.getElementById('sOps');
+if (opsEl) statsObs.observe(opsEl);
+
+
+/* ── SCROLL REVEAL ──────────────────────── */
+const revObs = new IntersectionObserver((entries) => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      // Staggered delay for grouped elements
+      setTimeout(() => e.target.classList.add('on'), i * 65);
+      revObs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.06, rootMargin: '0px 0px -40px 0px' });
+
+document.querySelectorAll('.reveal').forEach(el => revObs.observe(el));
+
+
+/* ── WORLD MAP ──────────────────────────── */
+const canvas = document.getElementById('wmap');
+const ctx    = canvas.getContext('2d');
+
+/* Cell data: name, country code, relative position, type, value */
+const cells = [
+  { name:'Россия',    code:'RU', x:.62, y:.22, t:'a', v:'47 участников' },
+  { name:'Украина',   code:'UA', x:.57, y:.28, t:'a', v:'31 участник' },
+  { name:'Беларусь',  code:'BY', x:.555,y:.24, t:'a', v:'18 участников' },
+  { name:'Молдова',   code:'MD', x:.56, y:.295,t:'a', v:'8 участников' },
+  { name:'Казахстан', code:'KZ', x:.65, y:.30, t:'a', v:'12 участников' },
+  { name:'Германия',  code:'DE', x:.50, y:.27, t:'a', v:'24 участника' },
+  { name:'США',       code:'US', x:.20, y:.32, t:'a', v:'38 участников' },
+  { name:'Польша',    code:'PL', x:.53, y:.26, t:'a', v:'11 участников' },
+  { name:'UK',        code:'GB', x:.47, y:.25, t:'w', v:'9 наблюдателей' },
+  { name:'Франция',   code:'FR', x:.49, y:.29, t:'w', v:'7 наблюдателей' },
+  { name:'Бразилия',  code:'BR', x:.32, y:.58, t:'w', v:'5 наблюдателей' },
+  { name:'Япония',    code:'JP', x:.82, y:.32, t:'w', v:'6 наблюдателей' },
+  { name:'███████',   code:'??', x:.72, y:.38, t:'s', v:'Засекречено' },
+];
+
+let pulse = 0;
+
+function drawMap() {
+  const W = canvas.width, H = canvas.height;
+  ctx.clearRect(0, 0, W, H);
+
+  /* Grid lines */
+  ctx.strokeStyle = 'rgba(192,152,40,0.038)'; ctx.lineWidth = 0.5;
+  for (let x = 0; x < W; x += W / 14) {
+    ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke();
+  }
+  for (let y = 0; y < H; y += H / 7) {
+    ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke();
+  }
+
+  /* Connection lines between active cells */
+  const active = cells.filter(c => c.t === 'a');
+  active.forEach((a, i) => active.forEach((b, j) => {
+    if (j <= i) return;
+    const grad = ctx.createLinearGradient(a.x*W, a.y*H, b.x*W, b.y*H);
+    grad.addColorStop(0,   'rgba(192,152,40,0.04)');
+    grad.addColorStop(0.5, 'rgba(192,152,40,0.10)');
+    grad.addColorStop(1,   'rgba(192,152,40,0.04)');
+    ctx.strokeStyle = grad; ctx.lineWidth = 0.7;
+    ctx.beginPath();
+    ctx.moveTo(a.x*W, a.y*H);
+    ctx.lineTo(b.x*W, b.y*H);
+    ctx.stroke();
+  }));
+
+  /* Dots with pulse rings */
+  cells.forEach(c => {
+    const px = c.x * W, py = c.y * H;
+    const col = c.t === 'a' ? 'rgba(192,152,40,1)'
+              : c.t === 's' ? 'rgba(168,40,40,1)'
+              : 'rgba(80,80,100,1)';
+
+    /* Animated pulse for active cells */
+    if (c.t === 'a') {
+      const r = (pulse % 80) / 80;
+      ctx.beginPath();
+      ctx.arc(px, py, 8 + r * 14, 0, Math.PI * 2);
+      ctx.strokeStyle = `rgba(192,152,40,${0.16 * (1 - r)})`;
+      ctx.lineWidth = 1; ctx.stroke();
+    }
+
+    /* Main dot */
+    ctx.beginPath();
+    ctx.arc(px, py, c.t === 'w' ? 3 : 5, 0, Math.PI * 2);
+    ctx.fillStyle = col;
+    ctx.fill();
+
+    /* Code label */
+    ctx.font = "9px 'Cinzel', serif";
+    ctx.fillStyle = c.t === 's'
+      ? 'rgba(168,40,40,0.55)'
+      : 'rgba(192,152,40,0.5)';
+    ctx.fillText(c.code, px + 9, py - 5);
+  });
+
+  pulse++;
+}
+
+function resizeMap() {
+  canvas.width  = canvas.offsetWidth;
+  canvas.height = 480;
+  drawMap();
+}
+
+let mapResizeTimer;
+window.addEventListener('resize', () => {
+  clearTimeout(mapResizeTimer);
+  mapResizeTimer = setTimeout(resizeMap, 120);
+});
+setTimeout(resizeMap, 100);
+setInterval(drawMap, 48);
+
+/* Map tooltip on hover */
+canvas.addEventListener('mousemove', e => {
+  const rect = canvas.getBoundingClientRect();
+  const ex = (e.clientX - rect.left) / canvas.width;
+  const ey = (e.clientY - rect.top)  / canvas.height;
+  let hit = null;
+  cells.forEach(c => {
+    const dx = c.x - ex, dy = c.y - ey;
+    if (Math.sqrt(dx*dx + dy*dy) < 0.028) hit = c;
+  });
+  const tt = document.getElementById('mtt');
+  if (hit) {
+    tt.style.display = 'block';
+    tt.style.left = (e.clientX - rect.left + 20) + 'px';
+    tt.style.top  = (e.clientY - rect.top - 68) + 'px';
+    document.getElementById('ttc').textContent = hit.code;
+    document.getElementById('ttn').textContent = hit.name;
+    document.getElementById('ttv').textContent = hit.v;
+  } else {
+    tt.style.display = 'none';
+  }
+});
+canvas.addEventListener('mouseleave', () => {
+  document.getElementById('mtt').style.display = 'none';
+});
+
+
+/* ── FAQ ACCORDION ──────────────────────── */
+function toggleFaq(el) {
+  const item = el.closest('.faq-item');
+  const isOpen = item.classList.contains('open');
+  document.querySelectorAll('.faq-item.open').forEach(i => i.classList.remove('open'));
+  if (!isOpen) item.classList.add('open');
+}
+
+
+/* ── FORM: OSINT REQUEST ────────────────── */
+function sendOsint() {
+  const desc = document.getElementById('oDesc').value;
+  const nick = (document.getElementById('oNick').value || 'ANONYMOUS').trim().replace(/\s+/g,'_');
+  const btn  = document.getElementById('osintBtn');
+  const span = btn.querySelector('span');
+
+  if (!desc.trim()) {
+    span.textContent = '⚠ Заполни описание';
+    btn.style.background = 'linear-gradient(145deg, #7a2a1a, #8a3828)';
+    setTimeout(() => {
+      span.textContent = 'Отправить запрос';
+      btn.style.background = '';
+    }, 2400);
+    return;
+  }
+
+  window.open('https://t.me/LegionAnket_bot?start=osint_' + encodeURIComponent(nick), '_blank');
+  span.textContent = '✓ Запрос отправлен';
+  setTimeout(() => span.textContent = 'Отправить запрос', 3000);
+}
+
+
+/* ── FORM: CONTACT MESSAGE ──────────────── */
+function sendMsg() {
+  const btn  = document.getElementById('sendBtn');
+  const span = btn.querySelector('span');
+  const callsign = document.querySelector('#contact .form-input').value.trim();
+  const message  = document.querySelector('#contact .form-textarea').value.trim();
+
+  if (!message) {
+    span.textContent = '⚠ Введи сообщение';
+    btn.style.background = 'linear-gradient(145deg, #7a2a1a, #8a3828)';
+    setTimeout(() => {
+      span.textContent = 'Отправить';
+      btn.style.background = '';
+    }, 2400);
+    return;
+  }
+
+  span.textContent = '✓ Отправлено';
+  setTimeout(() => span.textContent = 'Отправить', 3000);
+}
+
+
+/* ── MOBILE MENU ────────────────────────── */
+function toggleMenu() {
+  document.getElementById('burger').classList.toggle('open');
+  document.getElementById('mobMenu').classList.toggle('open');
+  document.body.style.overflow = document.getElementById('mobMenu').classList.contains('open') ? 'hidden' : '';
+}
+
+function closeMenu() {
+  document.getElementById('burger').classList.remove('open');
+  document.getElementById('mobMenu').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+
+/* ── FAQ ACCORDION ──────────────────────── */
+function toggleFaq(el) {
+  const item = el.closest('.faq-item');
+  const isOpen = item.classList.contains('open');
+  document.querySelectorAll('.faq-item.open').forEach(i => i.classList.remove('open'));
+  if (!isOpen) item.classList.add('open');
+}
+
+
+/* ── ACTIVE NAV LINK — section tracker ─── */
+(function initActiveNav() {
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('.nav-links a');
+
+  const navObs = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const id = entry.target.getAttribute('id');
+        navLinks.forEach(a => {
+          a.classList.toggle('nav-active', a.getAttribute('href') === '#' + id);
+        });
+      }
+    });
+  }, { threshold: 0.3, rootMargin: '-80px 0px -40% 0px' });
+
+  sections.forEach(s => navObs.observe(s));
+})();
+
+
+/* ── TYPING EFFECT — hero subtitle ─────── */
+(function initTyping() {
+  const el = document.querySelector('.hero-subtitle');
+  if (!el) return;
+
+  const fullText = el.textContent.trim();
+  el.textContent = '';
+
+  const cursor = document.createElement('span');
+  cursor.className = 'typing-cursor';
+  el.appendChild(cursor);
+
+  let i = 0;
+  setTimeout(() => {
+    const interval = setInterval(() => {
+      if (i >= fullText.length) {
+        clearInterval(interval);
+        return;
+      }
+      el.insertBefore(document.createTextNode(fullText[i]), cursor);
+      i++;
+    }, 52);
+  }, 1400);
+})();
+
+
+/* ── STAGGER for grid children ──────────── */
+(function initStagger() {
+  const grids = document.querySelectorAll(
+    '.ops-grid, .news-grid, .quotes-grid, .ach-grid, .osint-services'
+  );
+  grids.forEach(grid => {
+    Array.from(grid.children).forEach((child, idx) => {
+      if (!child.classList.contains('stagger-child')) {
+        child.classList.add('reveal', 'stagger-child');
+        child.style.setProperty('--i', idx);
+        revObs.observe(child);
+      }
+    });
+  });
+})();
+
+</script>
+</body>
+</html>
